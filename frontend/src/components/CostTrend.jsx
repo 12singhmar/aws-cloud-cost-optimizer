@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 /**
  * CostTrend Component
  * Renders a clean, responsive SVG line/area chart for historical monthly spend.
+ * Dynamically scales to arbitrary scenario expenditure levels.
  */
 export default function CostTrend({ costTrend = [] }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -19,13 +20,22 @@ export default function CostTrend({ costTrend = [] }) {
   const chartWidth = svgWidth - padding.left - padding.right;
   const chartHeight = svgHeight - padding.top - padding.bottom;
 
-  // Scale calculations
-  const minCost = 3000;
-  const maxCost = 4500;
-  const costRange = maxCost - minCost;
+  // Dynamic scale calculations based on current scenario data
+  const costs = costTrend.map((item) => item.cost);
+  const rawMin = Math.min(...costs);
+  const rawMax = Math.max(...costs);
+
+  // Buffer range with rounding to clean steps
+  const costSpread = rawMax - rawMin;
+  const buffer = costSpread > 0 ? costSpread * 0.15 : Math.max(100, rawMax * 0.15);
+
+  const minCost = Math.max(0, Math.floor((rawMin - buffer) / 50) * 50);
+  const maxCost = Math.ceil((rawMax + buffer) / 50) * 50;
+  const costRange = maxCost - minCost > 0 ? maxCost - minCost : 100;
 
   const points = costTrend.map((item, index) => {
-    const x = padding.left + (index / (costTrend.length - 1)) * chartWidth;
+    const divisor = costTrend.length > 1 ? costTrend.length - 1 : 1;
+    const x = padding.left + (index / divisor) * chartWidth;
     const y = padding.top + chartHeight - ((item.cost - minCost) / costRange) * chartHeight;
     return { ...item, x, y };
   });
@@ -37,19 +47,38 @@ export default function CostTrend({ costTrend = [] }) {
 
   const areaPath = `${linePath} L ${points[points.length - 1].x} ${padding.top + chartHeight} L ${points[0].x} ${padding.top + chartHeight} Z`;
 
-  // Y-Axis tick values
-  const yTicks = [3000, 3500, 4000, 4500];
+  // Compute 4 evenly spaced Y-Axis tick values
+  const yTicks = [
+    minCost,
+    Math.round(minCost + costRange * 0.33),
+    Math.round(minCost + costRange * 0.66),
+    maxCost,
+  ];
+
+  // Dynamic trend calculation between first and last data point
+  const firstPoint = costTrend[0];
+  const lastPoint = costTrend[costTrend.length - 1];
+  const totalChange = lastPoint.cost - firstPoint.cost;
+  const totalChangePct = firstPoint.cost > 0 ? (totalChange / firstPoint.cost) * 100 : 0;
+  const isIncrease = totalChange > 0;
+  const isDecrease = totalChange < 0;
+
+  const trendText = isIncrease
+    ? `Total increase: +$${Math.round(totalChange).toLocaleString()} (+${totalChangePct.toFixed(1)}%)`
+    : isDecrease
+    ? `Total decrease: -$${Math.round(Math.abs(totalChange)).toLocaleString()} (${totalChangePct.toFixed(1)}%)`
+    : `Spend steady ($${Math.round(lastPoint.cost).toLocaleString()})`;
 
   return (
     <div className="card dashboard-card cost-trend-card">
       <div className="card-header">
         <div>
           <h3 className="card-title">Cost trend</h3>
-          <span className="card-subtitle">Last 6 months</span>
+          <span className="card-subtitle">Last {costTrend.length} months</span>
         </div>
         <div className="trend-summary-pill">
-          <span className="trend-dot" />
-          <span>Total increase: +$866 (+25.3%)</span>
+          <span className={`trend-dot ${isDecrease ? 'green' : ''}`} />
+          <span>{trendText}</span>
         </div>
       </div>
 
@@ -182,7 +211,7 @@ export default function CostTrend({ costTrend = [] }) {
       </div>
 
       <div className="card-footer-note">
-        <span>Consistent month-over-month increase observed across EC2 and unattached storage.</span>
+        <span>Deterministic scenario trend: historical monthly expenditure across compute and storage.</span>
       </div>
     </div>
   );

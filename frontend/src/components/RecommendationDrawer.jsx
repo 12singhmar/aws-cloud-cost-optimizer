@@ -3,9 +3,10 @@ import React, { useEffect, useRef } from 'react';
 /**
  * RecommendationDrawer Component
  * A right-side slide-out panel that displays full explainable evidence,
- * metrics, risk assessment, and safe human verification guidance for a selected finding.
+ * metrics, risk assessment, safe human verification guidance, and access
+ * to the cross-functional Change Passport.
  */
-export default function RecommendationDrawer({ finding, isOpen, onClose }) {
+export default function RecommendationDrawer({ finding, isOpen, onClose, onOpenPassport }) {
   const drawerRef = useRef(null);
   const closeButtonRef = useRef(null);
 
@@ -110,6 +111,38 @@ export default function RecommendationDrawer({ finding, isOpen, onClose }) {
             </div>
           </div>
 
+          {/* Change Passport CTA Banner inside Drawer */}
+          <div className="drawer-passport-cta-card">
+            <div className="passport-cta-header">
+              <div className="passport-cta-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+              </div>
+              <div>
+                <h4 className="passport-cta-title">Cross-Functional Change Passport</h4>
+                <p className="passport-cta-desc">
+                  Review Finance, Engineering, Security, and Operations validation checks, pricing traces, and run What-If simulations.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="btn-open-passport-action"
+              onClick={() => onOpenPassport?.(finding)}
+            >
+              <span>Open Change Passport Workspace</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+
           {/* Section: Why this was flagged */}
           <section className="drawer-section">
             <h3 className="drawer-section-title">
@@ -144,7 +177,7 @@ export default function RecommendationDrawer({ finding, isOpen, onClose }) {
             <div className="evidence-table-wrapper">
               <table className="evidence-table">
                 <tbody>
-                  {finding.evidence.map((row, idx) => (
+                  {(finding.evidence || []).map((row, idx) => (
                     <tr key={idx}>
                       <td className="evidence-label">{row.label}</td>
                       <td className="evidence-value font-mono">{row.value}</td>
@@ -176,14 +209,26 @@ export default function RecommendationDrawer({ finding, isOpen, onClose }) {
         {/* Drawer Footer (Read-Only Actions) */}
         <div className="drawer-footer">
           <div className="drawer-footer-actions">
+            <button
+              type="button"
+              className="btn-drawer-passport"
+              onClick={() => onOpenPassport?.(finding)}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              <span>Change Passport</span>
+            </button>
+
             <a
               href={finding.awsConsoleUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-aws-console"
             >
-              <span>Review in AWS Console</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <span>AWS Console</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                 <polyline points="15 3 21 3 21 9" />
                 <line x1="10" y1="14" x2="21" y2="3" />

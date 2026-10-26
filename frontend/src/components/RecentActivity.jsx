@@ -6,7 +6,7 @@ import React from 'react';
  */
 export default function RecentActivity({ 
   activities = [],
-  lastAnalysis = "4 minutes ago",
+  lastAnalysis = "Just now",
   statusText = "Analysis data available"
 }) {
   return (
@@ -18,7 +18,7 @@ export default function RecentActivity({
         </div>
         <div className="activity-live-badge">
           <span className="activity-live-dot" />
-          <span>Live feed</span>
+          <span>Audit feed</span>
         </div>
       </div>
 

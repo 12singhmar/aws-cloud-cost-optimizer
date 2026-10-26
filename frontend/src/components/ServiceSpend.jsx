@@ -10,6 +10,10 @@ export default function ServiceSpend({ serviceSpend = [] }) {
   }
 
   const totalSpend = serviceSpend.reduce((acc, curr) => acc + curr.spend, 0);
+  const topService = serviceSpend[0];
+  const footerNote = topService 
+    ? `${topService.name} accounts for ${topService.percentage}% of total monthly expenditure.`
+    : 'Distribution across active cloud resource types.';
 
   return (
     <div className="card dashboard-card service-spend-card">
@@ -19,7 +23,7 @@ export default function ServiceSpend({ serviceSpend = [] }) {
           <span className="card-subtitle">Distribution across active AWS resources</span>
         </div>
         <div className="service-total-pill font-mono">
-          Total: ${totalSpend.toLocaleString()}
+          Total: ${Math.round(totalSpend).toLocaleString()}
         </div>
       </div>
 
@@ -59,7 +63,7 @@ export default function ServiceSpend({ serviceSpend = [] }) {
       </div>
 
       <div className="card-footer-note">
-        <span>EC2 compute accounts for roughly half of total monthly expenditure.</span>
+        <span>{footerNote}</span>
       </div>
     </div>
   );

@@ -26,16 +26,31 @@ export default function PriorityFindings({
         </div>
       </div>
 
-      <div className="findings-grid">
-        {findings.map((finding) => (
-          <FindingCard
-            key={finding.id}
-            finding={finding}
-            onSelect={onSelectFinding}
-            isSelected={selectedFindingId === finding.id}
-          />
-        ))}
-      </div>
+      {findings.length > 0 ? (
+        <div className="findings-grid">
+          {findings.map((finding) => (
+            <FindingCard
+              key={finding.id}
+              finding={finding}
+              onSelect={onSelectFinding}
+              isSelected={selectedFindingId === finding.id}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="findings-empty-state">
+          <div className="empty-state-icon-wrapper" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          </div>
+          <h4 className="empty-state-title">No priority findings detected</h4>
+          <p className="empty-state-desc">
+            All monitored resources currently meet utilisation, attachment, and storage efficiency thresholds.
+          </p>
+        </div>
+      )}
 
       <div className="findings-footer-info">
         <div className="info-icon" aria-hidden="true">
