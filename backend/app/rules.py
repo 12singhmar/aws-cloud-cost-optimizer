@@ -168,9 +168,15 @@ def idle_instances(scan: Scan, p: Prices, notes: list[str]) -> list[Finding]:
                          f"{MIN_HOURS_OF_DATA} (7 days) before we can say it is idle.")
             continue
         cpu_p95 = p95(cpu)
-        net_kbps = (sum(net) / len(net)) / 3600 / 1024 if net else 0.0
-        if cpu_p95 >= IDLE_CPU_P95 or net_kbps >= IDLE_NETWORK_KBPS:
+        if cpu_p95 >= IDLE_CPU_P95:
             continue
+        if net:
+            net_kbps = (sum(net) / len(net)) / 3600 / 1024
+            if net_kbps >= IDLE_NETWORK_KBPS:
+                continue
+            net_text = f"{net_kbps:.2f} KB/s"
+        else:
+            net_text = "not recorded in this data (judged on CPU only)"
         if not p.has_instance(i.type):
             notes.append(f"{i.name or i.id}: no price for {i.type} in {p.region}.")
             continue
@@ -178,11 +184,11 @@ def idle_instances(scan: Scan, p: Prices, notes: list[str]) -> list[Finding]:
         out.append(Finding(
             rule="Idle instance", resource_id=i.id, resource_type="EC2 instance",
             title=f"Idle server {i.name or i.id} ({i.type})",
-            why=f"Over {len(cpu) // 24} days, CPU stayed below {IDLE_CPU_P95}% in 95% of hours "
-                "and there was almost no network traffic.",
+            why=f"Over {len(cpu) // 24} days, CPU stayed below {IDLE_CPU_P95}% in 95% of hours"
+                + (" and there was almost no network traffic." if net else "."),
             monthly_cost=round(cost, 2),
             evidence={"CPU (95th percentile)": f"{cpu_p95:.2f}%",
-                      "Average network in": f"{net_kbps:.2f} KB/s",
+                      "Average network in": net_text,
                       "Hours of data": str(len(cpu))},
             calculation=[f"{i.type}: ${p.instance_hourly(i.type)} per hour x {HOURS_PER_MONTH} hours = ${cost:.2f}"],
             prices_used=[p.instance_sku(i.type)],
@@ -205,7 +211,8 @@ def build_report(scan: Scan, p: Prices) -> dict:
     total += len(scan.elastic_ips) * ip_cost(p)
 
     return {
-        "scan": scan.model_dump(mode="json", include={"id", "source", "account", "region", "scanned_at"}),
+        "scan": scan.model_dump(mode="json", include={"id", "source", "account", "region", "scanned_at",
+                                                      "description"}),
         "counts": {"instances": len(scan.instances), "volumes": len(scan.volumes),
                    "elastic_ips": len(scan.elastic_ips), "snapshots": len(scan.snapshots)},
         "monthly_cost": round(total, 2),

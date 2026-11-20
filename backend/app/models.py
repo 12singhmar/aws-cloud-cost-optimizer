@@ -48,15 +48,16 @@ class EbsSnapshot(BaseModel):
 class Metrics(BaseModel):
     """Hourly CloudWatch values, oldest first. None = no data for that hour."""
     cpu: list[Optional[float]]
-    network_in: list[Optional[float]]   # bytes per hour
+    network_in: list[Optional[float]] = Field(default_factory=list)   # bytes per hour; empty = not recorded
 
 
 class Scan(BaseModel):
     id: str
-    source: str                         # "aws" or "sample"
+    source: str                         # "aws" (live scan) or "public" (public dataset)
     account: str                        # masked, e.g. ********1234
     region: str
     scanned_at: datetime
+    description: str = ""               # where the data came from, and any assumptions
     instances: list[Instance] = Field(default_factory=list)
     volumes: list[Volume] = Field(default_factory=list)
     elastic_ips: list[ElasticIp] = Field(default_factory=list)

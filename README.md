@@ -42,7 +42,19 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. Without AWS connected you can still open the **sample data** (not a real account).
+Open http://localhost:5173. Without AWS connected, the page shows the **public dataset** below.
+
+## Data when no AWS account is connected
+
+There is no fake data in this project. If you cannot connect an account, the app opens a scan built from
+**real AWS CloudWatch data**: CPU usage of 8 real EC2 instances over 14 days (2014), published in the
+[Numenta Anomaly Benchmark](https://github.com/numenta/NAB/tree/master/data/realAWSCloudwatch) (MIT licence).
+`scripts/import_public_data.py` downloads it and converts it into the same format as a live scan.
+
+The dataset does not include instance types or network traffic, so these instances are priced as
+m5.large (an assumption, shown on the page) and the idle rule judges them on CPU only. It only covers
+the idle-server rule; the disk, IP and snapshot rules need a live account.
+On this data the tool flags 3 of the 8 instances as idle.
 
 ## Connecting a real AWS account
 

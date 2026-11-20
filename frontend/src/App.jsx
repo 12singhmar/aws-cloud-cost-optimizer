@@ -28,7 +28,7 @@ function ConnectHelp({ status }) {
   )
 }
 
-function Finding({ f, open, onToggle }) {
+function Finding({ f, open, onToggle, isPublic }) {
   return (
     <div className={'finding' + (open ? ' open' : '')}>
       <button className="finding-head" onClick={onToggle}>
@@ -51,7 +51,9 @@ function Finding({ f, open, onToggle }) {
           <ul>{f.calculation.map((c) => <li key={c}>{c}</li>)}</ul>
           <p className="muted small">AWS price used: {f.prices_used.join('; ')}</p>
           <h4>How to fix it</h4>
-          {f.fix.map((c) => <pre key={c}>{c}</pre>)}
+          {isPublic
+            ? <p className="muted small">This instance is from a public dataset, not your account, so there is nothing to run.</p>
+            : f.fix.map((c) => <pre key={c}>{c}</pre>)}
         </div>
       )}
     </div>
@@ -119,13 +121,14 @@ export default function App() {
           <select id="scan" value={scanId || ''} onChange={(e) => { setScanId(e.target.value); setOpenId(null) }}>
             {scans.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.source === 'sample' ? 'Sample data (not a real account)' : `${s.account} · ${new Date(s.scanned_at).toLocaleString()}`}
+                {s.source === 'public' ? 'Public dataset: 8 real EC2 instances (NAB, 2014)' : `${s.account} · ${new Date(s.scanned_at).toLocaleString()}`}
               </option>
             ))}
           </select>
-          {current && <span className={'pill ' + (current.source === 'aws' ? 'good' : 'warn')}>{current.source === 'aws' ? 'Real AWS data' : 'Sample data'}</span>}
+          {current && <span className={'pill ' + (current.source === 'aws' ? 'good' : 'warn')}>{current.source === 'aws' ? 'Your AWS account' : 'Public real data'}</span>}
         </div>
       )}
+      {report?.scan.description && <p className="muted small">{report.scan.description}</p>}
 
       {report && (
         <>
@@ -144,6 +147,7 @@ export default function App() {
           {report.findings.length === 0 && <div className="box">No waste found.</div>}
           {report.findings.map((f) => (
             <Finding key={f.resource_id + f.rule} f={f} open={openId === f.resource_id}
+              isPublic={report.scan.source === 'public'}
               onToggle={() => setOpenId(openId === f.resource_id ? null : f.resource_id)} />
           ))}
 

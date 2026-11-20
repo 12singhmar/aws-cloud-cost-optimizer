@@ -89,6 +89,13 @@ def test_missing_hours_are_not_counted_as_zero():
     assert report["findings"] == [] and report["notes"]
 
 
+def test_without_network_data_idle_is_judged_on_cpu_and_says_so():
+    s = scan(instances=[server("cpu-only")], metrics={"cpu-only": Metrics(cpu=[0.2] * (14 * 24))})
+    f = build_report(s, P)["findings"][0]
+    assert f["rule"] == "Idle instance"
+    assert "not recorded" in f["evidence"]["Average network in"]
+
+
 def test_every_finding_has_evidence_price_and_fix():
     report = build_report(scan(volumes=[vol("v")], elastic_ips=[ElasticIp(allocation_id="e", public_ip="1.1.1.1")]), P)
     assert report["monthly_waste"] > 0

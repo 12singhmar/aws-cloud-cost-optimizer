@@ -60,9 +60,11 @@ def test_status_without_credentials(monkeypatch):
     assert main.status()["connected"] is False
 
 
-def test_sample_report_and_bad_ids():
+def test_public_data_report_and_bad_ids():
     client = TestClient(main.app)
-    assert client.get("/api/report/sample").json()["findings"]
+    report = client.get("/api/report/public-nab-ec2").json()
+    assert len(report["findings"]) == 3          # 3 of the 8 real EC2 instances are idle
+    assert "Numenta" in report["scan"]["description"]
     assert client.get("/api/report/nope").status_code == 404
     assert client.get("/api/report/..%2Fsecret").status_code == 404
 
