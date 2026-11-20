@@ -75,7 +75,9 @@ def scan_account(session) -> Scan:
                     volume_ids=[b["Ebs"]["VolumeId"] for b in i.get("BlockDeviceMappings", []) if "Ebs" in b]))
                 if state == "running":
                     metrics[i["InstanceId"]] = Metrics(
+                        start=start,
                         cpu=_hourly(cw, i["InstanceId"], "CPUUtilization", "Average", start, hours),
+                        cpu_max=_hourly(cw, i["InstanceId"], "CPUUtilization", "Maximum", start, hours),
                         network_in=_hourly(cw, i["InstanceId"], "NetworkIn", "Sum", start, hours))
 
     volumes = []

@@ -1,0 +1,3458 @@
+{
+ "ec2_price_list_version": "20261120202216",
+ "fetched_at": "2026-11-20T21:35:31+00:00",
+ "hours_per_month": 730,
+ "instances": {
+  "c5.12xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$2.328 per On Demand Linux c5.12xlarge Instance Hour",
+   "memory_gib": 96.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 11991.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.467,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 23004.0
+    }
+   },
+   "sku": "FAEB6MVJ4PHXAEQX",
+   "usd_per_hour": 2.328,
+   "vcpu": 48
+  },
+  "c5.18xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$3.492 per On Demand Linux c5.18xlarge Instance Hour",
+   "memory_gib": 144.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 17987.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.2,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 34505.0
+    }
+   },
+   "sku": "SZ7QZBGVF3PE4M9H",
+   "usd_per_hour": 3.492,
+   "vcpu": 72
+  },
+  "c5.24xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$4.656 per On Demand Linux c5.24xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 23982.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.933,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 46007.0
+    }
+   },
+   "sku": "93YQACZFNWMAHZBQ",
+   "usd_per_hour": 4.656,
+   "vcpu": 96
+  },
+  "c5.2xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.388 per On Demand Linux c5.2xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1999.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.244,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3834.0
+    }
+   },
+   "sku": "PNCTSZUGECNP3EBA",
+   "usd_per_hour": 0.388,
+   "vcpu": 8
+  },
+  "c5.4xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.776 per On Demand Linux c5.4xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3997.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.489,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 7668.0
+    }
+   },
+   "sku": "MXZJRDDEUB3D7TE9",
+   "usd_per_hour": 0.776,
+   "vcpu": 16
+  },
+  "c5.9xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$1.746 per On Demand Linux c5.9xlarge Instance Hour",
+   "memory_gib": 72.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 8993.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.1,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 17253.0
+    }
+   },
+   "sku": "CPW9N2NGARABH27P",
+   "usd_per_hour": 1.746,
+   "vcpu": 36
+  },
+  "c5.large": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.097 per On Demand Linux c5.large Instance Hour",
+   "memory_gib": 4.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 500.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.061,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 958.0
+    }
+   },
+   "sku": "S3BME23KN52QCQ5Q",
+   "usd_per_hour": 0.097,
+   "vcpu": 2
+  },
+  "c5.xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.194 per On Demand Linux c5.xlarge Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 999.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.122,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1917.0
+    }
+   },
+   "sku": "BUQGC5KFEYR2N468",
+   "usd_per_hour": 0.194,
+   "vcpu": 4
+  },
+  "c6g.12xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$1.8624 per On Demand Linux c6g.12xlarge Instance Hour",
+   "memory_gib": 96.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 9593.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.1733,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 18403.0
+    }
+   },
+   "sku": "FFXYHV82DZYP3EVB",
+   "usd_per_hour": 1.8624,
+   "vcpu": 48
+  },
+  "c6g.16xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$2.4832 per On Demand Linux c6g.16xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 12791.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.5644,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 24537.0
+    }
+   },
+   "sku": "AUWPFZW8EP3C7CG8",
+   "usd_per_hour": 2.4832,
+   "vcpu": 64
+  },
+  "c6g.2xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$0.3104 per On Demand Linux c6g.2xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1599.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.1956,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3067.0
+    }
+   },
+   "sku": "YU7WW3JUQ4EWDTHH",
+   "usd_per_hour": 0.3104,
+   "vcpu": 8
+  },
+  "c6g.4xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$0.6208 per On Demand Linux c6g.4xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3198.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.3911,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 6134.0
+    }
+   },
+   "sku": "U6FBMQTATNYGJBNE",
+   "usd_per_hour": 0.6208,
+   "vcpu": 16
+  },
+  "c6g.8xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$1.2416 per On Demand Linux c6g.8xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 6395.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.7822,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 12269.0
+    }
+   },
+   "sku": "STJ9FFEQWX8C72BG",
+   "usd_per_hour": 1.2416,
+   "vcpu": 32
+  },
+  "c6g.large": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$0.0776 per On Demand Linux c6g.large Instance Hour",
+   "memory_gib": 4.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 400.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0489,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 767.0
+    }
+   },
+   "sku": "E5ZZ47XS2TSFR5R3",
+   "usd_per_hour": 0.0776,
+   "vcpu": 2
+  },
+  "c6g.medium": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$0.0388 per On Demand Linux c6g.medium Instance Hour",
+   "memory_gib": 2.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 200.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0244,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 383.0
+    }
+   },
+   "sku": "CQ75TNU6SFV9HMEQ",
+   "usd_per_hour": 0.0388,
+   "vcpu": 1
+  },
+  "c6g.xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$0.1552 per On Demand Linux c6g.xlarge Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 799.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0978,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1534.0
+    }
+   },
+   "sku": "CPGQU6JJJ3EWEF37",
+   "usd_per_hour": 0.1552,
+   "vcpu": 4
+  },
+  "c6i.12xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$2.328 per On Demand Linux c6i.12xlarge Instance Hour",
+   "memory_gib": 96.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 12548.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.53468,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 24154.0
+    }
+   },
+   "sku": "VGDBCXMN75G8ZAR4",
+   "usd_per_hour": 2.328,
+   "vcpu": 48
+  },
+  "c6i.16xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$3.104 per On Demand Linux c6i.16xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 16730.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.04624,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 32205.0
+    }
+   },
+   "sku": "A8YQ92TQRVWE2FRQ",
+   "usd_per_hour": 3.104,
+   "vcpu": 64
+  },
+  "c6i.24xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$4.656 per On Demand Linux c6i.24xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 25095.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 3.06936,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 48308.0
+    }
+   },
+   "sku": "94FX368D5XGFD7R6",
+   "usd_per_hour": 4.656,
+   "vcpu": 96
+  },
+  "c6i.2xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.388 per On Demand Linux c6i.2xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2091.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.25578,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4026.0
+    }
+   },
+   "sku": "3YZQ8438FX68UBK7",
+   "usd_per_hour": 0.388,
+   "vcpu": 8
+  },
+  "c6i.32xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$6.208 per On Demand Linux c6i.32xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 33460.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 4.09248,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 64410.0
+    }
+   },
+   "sku": "DUX6UABTP6TSADDW",
+   "usd_per_hour": 6.208,
+   "vcpu": 128
+  },
+  "c6i.4xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.776 per On Demand Linux c6i.4xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4183.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.51156,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 8051.0
+    }
+   },
+   "sku": "AFFSDDAEN5FGSPRU",
+   "usd_per_hour": 0.776,
+   "vcpu": 16
+  },
+  "c6i.8xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$1.552 per On Demand Linux c6i.8xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 8365.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.02312,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 16103.0
+    }
+   },
+   "sku": "VZ3FZWUX3S7NV7HR",
+   "usd_per_hour": 1.552,
+   "vcpu": 32
+  },
+  "c6i.large": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.097 per On Demand Linux c6i.large Instance Hour",
+   "memory_gib": 4.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 523.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.06395,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1006.0
+    }
+   },
+   "sku": "SQZ53RQMTFAHP7HJ",
+   "usd_per_hour": 0.097,
+   "vcpu": 2
+  },
+  "c6i.xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.194 per On Demand Linux c6i.xlarge Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1046.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.12789,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2013.0
+    }
+   },
+   "sku": "5G3TEYXT4TBMH686",
+   "usd_per_hour": 0.194,
+   "vcpu": 4
+  },
+  "c7g.12xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$1.9788 per On Demand Linux c7g.12xlarge Instance Hour",
+   "memory_gib": 96.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 10665.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.3045,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 20531.0
+    }
+   },
+   "sku": "EEXYYQPKPPR4P9EN",
+   "usd_per_hour": 1.9788,
+   "vcpu": 48
+  },
+  "c7g.16xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$2.6384 per On Demand Linux c7g.16xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 14221.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.7393,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 27374.0
+    }
+   },
+   "sku": "TBXWDDQ98RYSEAA2",
+   "usd_per_hour": 2.6384,
+   "vcpu": 64
+  },
+  "c7g.2xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$0.3298 per On Demand Linux c7g.2xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1778.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.2174,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3422.0
+    }
+   },
+   "sku": "Z8XKB42XARKXZQVT",
+   "usd_per_hour": 0.3298,
+   "vcpu": 8
+  },
+  "c7g.4xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$0.6596 per On Demand Linux c7g.4xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3555.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.4348,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 6844.0
+    }
+   },
+   "sku": "M8VV938ASR74AK5E",
+   "usd_per_hour": 0.6596,
+   "vcpu": 16
+  },
+  "c7g.8xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$1.3192 per On Demand Linux c7g.8xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 7110.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.8697,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 13687.0
+    }
+   },
+   "sku": "NJCMEKXSUCE72MPC",
+   "usd_per_hour": 1.3192,
+   "vcpu": 32
+  },
+  "c7g.large": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$0.0825 per On Demand Linux c7g.large Instance Hour",
+   "memory_gib": 4.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 444.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0544,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 855.0
+    }
+   },
+   "sku": "5FRBFFTMPRGRBCKW",
+   "usd_per_hour": 0.0825,
+   "vcpu": 2
+  },
+  "c7g.medium": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$0.0412 per On Demand Linux c7g.medium Instance Hour",
+   "memory_gib": 2.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 222.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0272,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 428.0
+    }
+   },
+   "sku": "ERWCYN439BNQFNRN",
+   "usd_per_hour": 0.0412,
+   "vcpu": 1
+  },
+  "c7g.xlarge": {
+   "arm": true,
+   "category": "Compute optimized",
+   "description": "$0.1649 per On Demand Linux c7g.xlarge Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 889.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.1087,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1711.0
+    }
+   },
+   "sku": "XJ68JJEQT9EJWV4Y",
+   "usd_per_hour": 0.1649,
+   "vcpu": 4
+  },
+  "c7i.12xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$2.4444 per On Demand Linux c7i.12xlarge Instance Hour",
+   "memory_gib": 96.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 13175.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.61143,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 25361.0
+    }
+   },
+   "sku": "WEERWSGBPP99A6J2",
+   "usd_per_hour": 2.4444,
+   "vcpu": 48
+  },
+  "c7i.16xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$3.2592 per On Demand Linux c7i.16xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 17567.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.14857,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 33815.0
+    }
+   },
+   "sku": "FRQB64XBATVJJ5ZD",
+   "usd_per_hour": 3.2592,
+   "vcpu": 64
+  },
+  "c7i.24xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$4.8888 per On Demand Linux c7i.24xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 26350.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 3.22285,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 50723.0
+    }
+   },
+   "sku": "EGFCG3Q4S4VBM7M9",
+   "usd_per_hour": 4.8888,
+   "vcpu": 96
+  },
+  "c7i.2xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.4074 per On Demand Linux c7i.2xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2196.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.26857,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4227.0
+    }
+   },
+   "sku": "C6A9VKX345MTPUYK",
+   "usd_per_hour": 0.4074,
+   "vcpu": 8
+  },
+  "c7i.48xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$9.7776 per On Demand Linux c7i.48xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 52700.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 6.44571,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 101446.0
+    }
+   },
+   "sku": "ZQ933QDGTETA4W8Z",
+   "usd_per_hour": 9.7776,
+   "vcpu": 192
+  },
+  "c7i.4xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.8148 per On Demand Linux c7i.4xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4392.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.53714,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 8454.0
+    }
+   },
+   "sku": "NEQHMD9KUYYE328A",
+   "usd_per_hour": 0.8148,
+   "vcpu": 16
+  },
+  "c7i.8xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$1.6296 per On Demand Linux c7i.8xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 8783.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.07428,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 16908.0
+    }
+   },
+   "sku": "5SAVCBMAVATBWMH3",
+   "usd_per_hour": 1.6296,
+   "vcpu": 32
+  },
+  "c7i.large": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.10185 per On Demand Linux c7i.large Instance Hour",
+   "memory_gib": 4.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 549.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.06714,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1057.0
+    }
+   },
+   "sku": "YNNCAUQZ5DH8WYKD",
+   "usd_per_hour": 0.10185,
+   "vcpu": 2
+  },
+  "c7i.xlarge": {
+   "arm": false,
+   "category": "Compute optimized",
+   "description": "$0.2037 per On Demand Linux c7i.xlarge Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1098.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.13429,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2113.0
+    }
+   },
+   "sku": "84RA7GKC9ENBYNN4",
+   "usd_per_hour": 0.2037,
+   "vcpu": 4
+  },
+  "m5.12xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$2.76 per On Demand Linux m5.12xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 14216.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.739,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 27272.0
+    }
+   },
+   "sku": "A65VEHYMUBAYJ5QH",
+   "usd_per_hour": 2.76,
+   "vcpu": 48
+  },
+  "m5.16xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$3.68 per On Demand Linux m5.16xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 18955.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.318,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 36363.0
+    }
+   },
+   "sku": "XZKSDYJYNCVGDHBP",
+   "usd_per_hour": 3.68,
+   "vcpu": 64
+  },
+  "m5.24xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$5.52 per On Demand Linux m5.24xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 28433.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 3.478,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 54545.0
+    }
+   },
+   "sku": "BMXENRM9BM54QBEV",
+   "usd_per_hour": 5.52,
+   "vcpu": 96
+  },
+  "m5.2xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.46 per On Demand Linux m5.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2369.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.29,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4545.0
+    }
+   },
+   "sku": "N5D4RSFRNZ3SRTJ3",
+   "usd_per_hour": 0.46,
+   "vcpu": 8
+  },
+  "m5.4xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.92 per On Demand Linux m5.4xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4739.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.58,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 9091.0
+    }
+   },
+   "sku": "QR7F3KDAWU8AH7GS",
+   "usd_per_hour": 0.92,
+   "vcpu": 16
+  },
+  "m5.8xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$1.84 per On Demand Linux m5.8xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 9478.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.159,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 18182.0
+    }
+   },
+   "sku": "TKCZSXDAVA4AM6YD",
+   "usd_per_hour": 1.84,
+   "vcpu": 32
+  },
+  "m5.large": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.115 per On Demand Linux m5.large Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 592.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.072,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1136.0
+    }
+   },
+   "sku": "JSXG89ERGHPGMPFM",
+   "usd_per_hour": 0.115,
+   "vcpu": 2
+  },
+  "m5.xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.23 per On Demand Linux m5.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1185.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.145,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2273.0
+    }
+   },
+   "sku": "BXS2CDUKEC83Q4SH",
+   "usd_per_hour": 0.23,
+   "vcpu": 4
+  },
+  "m6g.12xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$2.208 per On Demand Linux m6g.12xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 11331.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.3859,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 21932.0
+    }
+   },
+   "sku": "JQAY6ETPYP2UGZK2",
+   "usd_per_hour": 2.208,
+   "vcpu": 48
+  },
+  "m6g.16xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$2.944 per On Demand Linux m6g.16xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 15109.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.8479,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 29243.0
+    }
+   },
+   "sku": "ZVNZ97KH9NGD3G77",
+   "usd_per_hour": 2.944,
+   "vcpu": 64
+  },
+  "m6g.2xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.368 per On Demand Linux m6g.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1889.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.231,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3655.0
+    }
+   },
+   "sku": "QPGHTCRTTARVXXQ3",
+   "usd_per_hour": 0.368,
+   "vcpu": 8
+  },
+  "m6g.4xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.736 per On Demand Linux m6g.4xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3777.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.462,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 7311.0
+    }
+   },
+   "sku": "73M3RQNZU2ZSHA7B",
+   "usd_per_hour": 0.736,
+   "vcpu": 16
+  },
+  "m6g.8xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$1.472 per On Demand Linux m6g.8xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 7554.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.924,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 14622.0
+    }
+   },
+   "sku": "G7FZRRPKESBVJ8KA",
+   "usd_per_hour": 1.472,
+   "vcpu": 32
+  },
+  "m6g.large": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.092 per On Demand Linux m6g.large Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 472.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0577,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 914.0
+    }
+   },
+   "sku": "ABMDUBCXWNDE4XK5",
+   "usd_per_hour": 0.092,
+   "vcpu": 2
+  },
+  "m6g.medium": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.046 per On Demand Linux m6g.medium Instance Hour",
+   "memory_gib": 4.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 236.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0289,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 457.0
+    }
+   },
+   "sku": "GC5RF8NHMVSDFRTN",
+   "usd_per_hour": 0.046,
+   "vcpu": 1
+  },
+  "m6g.xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.184 per On Demand Linux m6g.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 944.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.1155,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1828.0
+    }
+   },
+   "sku": "4N8QDGZ9RKHC8BY6",
+   "usd_per_hour": 0.184,
+   "vcpu": 4
+  },
+  "m6i.12xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$2.76 per On Demand Linux m6i.12xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 14927.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.82574,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 28636.0
+    }
+   },
+   "sku": "F694WD4MGBF39Q4C",
+   "usd_per_hour": 2.76,
+   "vcpu": 48
+  },
+  "m6i.16xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$3.68 per On Demand Linux m6i.16xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 19903.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.43432,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 38181.0
+    }
+   },
+   "sku": "CTZBA23M6UYENABD",
+   "usd_per_hour": 3.68,
+   "vcpu": 64
+  },
+  "m6i.24xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$5.52 per On Demand Linux m6i.24xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 29855.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 3.65148,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 57272.0
+    }
+   },
+   "sku": "YFTTMWK74SWPZ4B5",
+   "usd_per_hour": 5.52,
+   "vcpu": 96
+  },
+  "m6i.2xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.46 per On Demand Linux m6i.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2488.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.30429,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4773.0
+    }
+   },
+   "sku": "VH97RSRQEMDGU79W",
+   "usd_per_hour": 0.46,
+   "vcpu": 8
+  },
+  "m6i.32xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$7.36 per On Demand Linux m6i.32xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 39806.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 4.86864,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 76363.0
+    }
+   },
+   "sku": "UE63MWT25EWJ8XRH",
+   "usd_per_hour": 7.36,
+   "vcpu": 128
+  },
+  "m6i.4xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.92 per On Demand Linux m6i.4xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4976.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.60858,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 9545.0
+    }
+   },
+   "sku": "NNP2X8EKEA4TV567",
+   "usd_per_hour": 0.92,
+   "vcpu": 16
+  },
+  "m6i.8xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$1.84 per On Demand Linux m6i.8xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 9952.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.21716,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 19091.0
+    }
+   },
+   "sku": "4YUTN4UYBNMRM4DK",
+   "usd_per_hour": 1.84,
+   "vcpu": 32
+  },
+  "m6i.large": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.115 per On Demand Linux m6i.large Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 622.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.07607,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1193.0
+    }
+   },
+   "sku": "ZKVBDD72Q9KXXAS8",
+   "usd_per_hour": 0.115,
+   "vcpu": 2
+  },
+  "m6i.xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.23 per On Demand Linux m6i.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1244.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.15215,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2386.0
+    }
+   },
+   "sku": "CDA6QD7A4Z7R84MV",
+   "usd_per_hour": 0.23,
+   "vcpu": 4
+  },
+  "m7g.12xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$2.3462 per On Demand Linux m7g.12xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 12689.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.552,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 24343.0
+    }
+   },
+   "sku": "QBWFJSEFP6ETR3MQ",
+   "usd_per_hour": 2.3462,
+   "vcpu": 48
+  },
+  "m7g.16xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$3.1283 per On Demand Linux m7g.16xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 16919.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.0694,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 32457.0
+    }
+   },
+   "sku": "J6V6BH8EJAH73S2Z",
+   "usd_per_hour": 3.1283,
+   "vcpu": 64
+  },
+  "m7g.2xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.391 per On Demand Linux m7g.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2115.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.2587,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4057.0
+    }
+   },
+   "sku": "EYSHRTMQWNXWZVSN",
+   "usd_per_hour": 0.391,
+   "vcpu": 8
+  },
+  "m7g.4xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.7821 per On Demand Linux m7g.4xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4230.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.5173,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 8114.0
+    }
+   },
+   "sku": "PJ2TRN2NVWF7ETNG",
+   "usd_per_hour": 0.7821,
+   "vcpu": 16
+  },
+  "m7g.8xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$1.5642 per On Demand Linux m7g.8xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 8460.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.0347,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 16229.0
+    }
+   },
+   "sku": "A7TPEJZT538FXTKA",
+   "usd_per_hour": 1.5642,
+   "vcpu": 32
+  },
+  "m7g.large": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.0978 per On Demand Linux m7g.large Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 529.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0647,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1014.0
+    }
+   },
+   "sku": "8X9A6TET3DR25ZYA",
+   "usd_per_hour": 0.0978,
+   "vcpu": 2
+  },
+  "m7g.medium": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.0489 per On Demand Linux m7g.medium Instance Hour",
+   "memory_gib": 4.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 264.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0323,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 507.0
+    }
+   },
+   "sku": "F4NMA3H6SNFQARFX",
+   "usd_per_hour": 0.0489,
+   "vcpu": 1
+  },
+  "m7g.xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.1955 per On Demand Linux m7g.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1057.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.1293,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2029.0
+    }
+   },
+   "sku": "PPWTPAB95N6CS3RS",
+   "usd_per_hour": 0.1955,
+   "vcpu": 4
+  },
+  "m7i.12xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$2.898 per On Demand Linux m7i.12xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 15674.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.91703,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 30068.0
+    }
+   },
+   "sku": "YZHPA9NMMQFVDME2",
+   "usd_per_hour": 2.898,
+   "vcpu": 48
+  },
+  "m7i.16xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$3.864 per On Demand Linux m7i.16xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 20898.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.55604,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 40090.0
+    }
+   },
+   "sku": "47PMS5BQM75J7RB9",
+   "usd_per_hour": 3.864,
+   "vcpu": 64
+  },
+  "m7i.24xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$5.796 per On Demand Linux m7i.24xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 31347.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 3.83405,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 60135.0
+    }
+   },
+   "sku": "D9KND6C6GWSKTUD2",
+   "usd_per_hour": 5.796,
+   "vcpu": 96
+  },
+  "m7i.2xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.483 per On Demand Linux m7i.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2612.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.3195,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 5011.0
+    }
+   },
+   "sku": "46QCK8WHWV5895DW",
+   "usd_per_hour": 0.483,
+   "vcpu": 8
+  },
+  "m7i.48xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$11.592 per On Demand Linux m7i.48xlarge Instance Hour",
+   "memory_gib": 768.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 62694.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 7.66811,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 120271.0
+    }
+   },
+   "sku": "Y42392HJZ5EK7MHP",
+   "usd_per_hour": 11.592,
+   "vcpu": 192
+  },
+  "m7i.4xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.966 per On Demand Linux m7i.4xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 5225.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.63901,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 10023.0
+    }
+   },
+   "sku": "EUWTSTD8BQ3EVK8E",
+   "usd_per_hour": 0.966,
+   "vcpu": 16
+  },
+  "m7i.8xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$1.932 per On Demand Linux m7i.8xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 10449.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.27802,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 20045.0
+    }
+   },
+   "sku": "2DRGSUZTPGZKGP8R",
+   "usd_per_hour": 1.932,
+   "vcpu": 32
+  },
+  "m7i.large": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.12075 per On Demand Linux m7i.large Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 653.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.07988,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1253.0
+    }
+   },
+   "sku": "7WQJU8VNG6NNBSMY",
+   "usd_per_hour": 0.12075,
+   "vcpu": 2
+  },
+  "m7i.xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.2415 per On Demand Linux m7i.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1306.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.15975,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2506.0
+    }
+   },
+   "sku": "HGW5X3ARBNFBSACE",
+   "usd_per_hour": 0.2415,
+   "vcpu": 4
+  },
+  "r5.12xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$3.648 per On Demand Linux r5.12xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 18790.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.298,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 36047.0
+    }
+   },
+   "sku": "ANQX7ARPTX828ZSU",
+   "usd_per_hour": 3.648,
+   "vcpu": 48
+  },
+  "r5.16xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$4.864 per On Demand Linux r5.16xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 25054.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 3.064,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 48063.0
+    }
+   },
+   "sku": "7XUHUVGHKKGRSWTJ",
+   "usd_per_hour": 4.864,
+   "vcpu": 64
+  },
+  "r5.24xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$7.296 per On Demand Linux r5.24xlarge Instance Hour",
+   "memory_gib": 768.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 37581.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 4.596,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 72094.0
+    }
+   },
+   "sku": "Q3TGY4VS8MEP9KQF",
+   "usd_per_hour": 7.296,
+   "vcpu": 96
+  },
+  "r5.2xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$0.608 per On Demand Linux r5.2xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3132.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.383,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 6008.0
+    }
+   },
+   "sku": "NHT5KUS9X5VYNND2",
+   "usd_per_hour": 0.608,
+   "vcpu": 8
+  },
+  "r5.4xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$1.216 per On Demand Linux r5.4xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 6263.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.766,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 12016.0
+    }
+   },
+   "sku": "EUTBMNK4ZKWCEG2H",
+   "usd_per_hour": 1.216,
+   "vcpu": 16
+  },
+  "r5.8xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$2.432 per On Demand Linux r5.8xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 12527.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.532,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 24031.0
+    }
+   },
+   "sku": "TAUXPEERSXJGS2Q5",
+   "usd_per_hour": 2.432,
+   "vcpu": 32
+  },
+  "r5.large": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$0.152 per On Demand Linux r5.large Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 783.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.096,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1502.0
+    }
+   },
+   "sku": "FZKQVXQSUXXYJWH3",
+   "usd_per_hour": 0.152,
+   "vcpu": 2
+  },
+  "r5.xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$0.304 per On Demand Linux r5.xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1566.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.192,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3004.0
+    }
+   },
+   "sku": "WADKRMX4T7XH7GYV",
+   "usd_per_hour": 0.304,
+   "vcpu": 4
+  },
+  "r6g.12xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$2.9184 per On Demand Linux r6g.12xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 15032.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.8386,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 28838.0
+    }
+   },
+   "sku": "VVCGW52Z6TGKXKJR",
+   "usd_per_hour": 2.9184,
+   "vcpu": 48
+  },
+  "r6g.16xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$3.8912 per On Demand Linux r6g.16xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 20043.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.4515,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 38450.0
+    }
+   },
+   "sku": "GVCATN62VEGZT4D9",
+   "usd_per_hour": 3.8912,
+   "vcpu": 64
+  },
+  "r6g.2xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$0.4864 per On Demand Linux r6g.2xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2505.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.3064,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 4806.0
+    }
+   },
+   "sku": "PXA38DUUG6VFTFQ7",
+   "usd_per_hour": 0.4864,
+   "vcpu": 8
+  },
+  "r6g.4xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$0.9728 per On Demand Linux r6g.4xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 5011.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.6129,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 9613.0
+    }
+   },
+   "sku": "XVHESD73D8YWU45T",
+   "usd_per_hour": 0.9728,
+   "vcpu": 16
+  },
+  "r6g.8xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$1.9456 per On Demand Linux r6g.8xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 10022.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.2257,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 19225.0
+    }
+   },
+   "sku": "6KUV5SMV63PC9K2D",
+   "usd_per_hour": 1.9456,
+   "vcpu": 32
+  },
+  "r6g.large": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$0.1216 per On Demand Linux r6g.large Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 626.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0766,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1202.0
+    }
+   },
+   "sku": "673N5S44JWZ6RVEE",
+   "usd_per_hour": 0.1216,
+   "vcpu": 2
+  },
+  "r6g.medium": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$0.0608 per On Demand Linux r6g.medium Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 313.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0383,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 601.0
+    }
+   },
+   "sku": "XAM4Q5THC4K6VDKF",
+   "usd_per_hour": 0.0608,
+   "vcpu": 1
+  },
+  "r6g.xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$0.2432 per On Demand Linux r6g.xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1253.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.1532,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2403.0
+    }
+   },
+   "sku": "QV3BZRTHERWHEYQD",
+   "usd_per_hour": 0.2432,
+   "vcpu": 4
+  },
+  "r6i.12xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$3.648 per On Demand Linux r6i.12xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 19730.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.41315,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 37849.0
+    }
+   },
+   "sku": "KDENHP99CY2A44PQ",
+   "usd_per_hour": 3.648,
+   "vcpu": 48
+  },
+  "r6i.16xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$4.864 per On Demand Linux r6i.16xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 26307.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 3.21754,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 50466.0
+    }
+   },
+   "sku": "JSENA3FPV6Y48ECH",
+   "usd_per_hour": 4.864,
+   "vcpu": 64
+  },
+  "r6i.24xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$7.296 per On Demand Linux r6i.24xlarge Instance Hour",
+   "memory_gib": 768.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 39460.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 4.8263,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 75699.0
+    }
+   },
+   "sku": "PTKKZXRC7EMQN8QN",
+   "usd_per_hour": 7.296,
+   "vcpu": 96
+  },
+  "r6i.2xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$0.608 per On Demand Linux r6i.2xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3288.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.40219,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 6308.0
+    }
+   },
+   "sku": "PDTCE4SS26FTSHTB",
+   "usd_per_hour": 0.608,
+   "vcpu": 8
+  },
+  "r6i.32xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$9.728 per On Demand Linux r6i.32xlarge Instance Hour",
+   "memory_gib": 1024.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 52613.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 6.43507,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 100931.0
+    }
+   },
+   "sku": "SBFC3FH8Q7V6G5MJ",
+   "usd_per_hour": 9.728,
+   "vcpu": 128
+  },
+  "r6i.4xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$1.216 per On Demand Linux r6i.4xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 6577.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.80438,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 12616.0
+    }
+   },
+   "sku": "QA9Z9X63TYHSK93Z",
+   "usd_per_hour": 1.216,
+   "vcpu": 16
+  },
+  "r6i.8xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$2.432 per On Demand Linux r6i.8xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 13153.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.60877,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 25233.0
+    }
+   },
+   "sku": "FES68BNG84VS73EA",
+   "usd_per_hour": 2.432,
+   "vcpu": 32
+  },
+  "r6i.large": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$0.152 per On Demand Linux r6i.large Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 822.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.10055,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1577.0
+    }
+   },
+   "sku": "GSNQ7AT86CZG7C4Z",
+   "usd_per_hour": 0.152,
+   "vcpu": 2
+  },
+  "r6i.xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$0.304 per On Demand Linux r6i.xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1644.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.2011,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3154.0
+    }
+   },
+   "sku": "S28ZP88P7MUSTNV4",
+   "usd_per_hour": 0.304,
+   "vcpu": 4
+  },
+  "r7g.12xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$3.1008 per On Demand Linux r7g.12xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 16770.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.0512,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 32172.0
+    }
+   },
+   "sku": "VXJEH54TAKVBRY9R",
+   "usd_per_hour": 3.1008,
+   "vcpu": 48
+  },
+  "r7g.16xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$4.1344 per On Demand Linux r7g.16xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 22361.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.7349,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 42896.0
+    }
+   },
+   "sku": "NZFXMYWHSXX65FKX",
+   "usd_per_hour": 4.1344,
+   "vcpu": 64
+  },
+  "r7g.2xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$0.5168 per On Demand Linux r7g.2xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2795.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.3419,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 5362.0
+    }
+   },
+   "sku": "XHDB9PU6QSFPDCSX",
+   "usd_per_hour": 0.5168,
+   "vcpu": 8
+  },
+  "r7g.4xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$1.0336 per On Demand Linux r7g.4xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 5590.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.6837,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 10724.0
+    }
+   },
+   "sku": "8JKQ9BCFW8X8HUBN",
+   "usd_per_hour": 1.0336,
+   "vcpu": 16
+  },
+  "r7g.8xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$2.0672 per On Demand Linux r7g.8xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 11180.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.3675,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 21448.0
+    }
+   },
+   "sku": "JN957SH5AAWNRMMS",
+   "usd_per_hour": 2.0672,
+   "vcpu": 32
+  },
+  "r7g.large": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$0.1292 per On Demand Linux r7g.large Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 699.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0855,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1340.0
+    }
+   },
+   "sku": "YP67HA2BWGRG8RA4",
+   "usd_per_hour": 0.1292,
+   "vcpu": 2
+  },
+  "r7g.medium": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$0.0646 per On Demand Linux r7g.medium Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 349.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0427,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 670.0
+    }
+   },
+   "sku": "2AY49A82UEUE369J",
+   "usd_per_hour": 0.0646,
+   "vcpu": 1
+  },
+  "r7g.xlarge": {
+   "arm": true,
+   "category": "Memory optimized",
+   "description": "$0.2584 per On Demand Linux r7g.xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1398.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.1709,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 2681.0
+    }
+   },
+   "sku": "S5ZJ7R899WHN2863",
+   "usd_per_hour": 0.2584,
+   "vcpu": 4
+  },
+  "r7i.12xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$3.8304 per On Demand Linux r7i.12xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 20716.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 2.53381,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 39742.0
+    }
+   },
+   "sku": "7P644ZZ8S322BFQZ",
+   "usd_per_hour": 3.8304,
+   "vcpu": 48
+  },
+  "r7i.16xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$5.1072 per On Demand Linux r7i.16xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 27622.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 3.37841,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 52989.0
+    }
+   },
+   "sku": "XGGR9PXW6TAV9R7Y",
+   "usd_per_hour": 5.1072,
+   "vcpu": 64
+  },
+  "r7i.24xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$7.6608 per On Demand Linux r7i.24xlarge Instance Hour",
+   "memory_gib": 768.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 41433.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 5.06762,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 79483.0
+    }
+   },
+   "sku": "66W2DP3K6TT3QNTP",
+   "usd_per_hour": 7.6608,
+   "vcpu": 96
+  },
+  "r7i.2xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$0.6384 per On Demand Linux r7i.2xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3453.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.4223,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 6624.0
+    }
+   },
+   "sku": "48PP8ENKSYB8BCCM",
+   "usd_per_hour": 0.6384,
+   "vcpu": 8
+  },
+  "r7i.48xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$15.3216 per On Demand Linux r7i.48xlarge Instance Hour",
+   "memory_gib": 1536.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 82866.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 10.13524,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 158967.0
+    }
+   },
+   "sku": "5J5E2GWXF7AM97ZD",
+   "usd_per_hour": 15.3216,
+   "vcpu": 192
+  },
+  "r7i.4xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$1.2768 per On Demand Linux r7i.4xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 6905.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.8446,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 13247.0
+    }
+   },
+   "sku": "KVXYKG3G98C4UNJ6",
+   "usd_per_hour": 1.2768,
+   "vcpu": 16
+  },
+  "r7i.8xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$2.5536 per On Demand Linux r7i.8xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 13811.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 1.68921,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 26494.0
+    }
+   },
+   "sku": "HJJTV8GSDPQXFMCX",
+   "usd_per_hour": 2.5536,
+   "vcpu": 32
+  },
+  "r7i.large": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$0.1596 per On Demand Linux r7i.large Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 863.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.10558,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1656.0
+    }
+   },
+   "sku": "5JJZTHQTEMM5RTXB",
+   "usd_per_hour": 0.1596,
+   "vcpu": 2
+  },
+  "r7i.xlarge": {
+   "arm": false,
+   "category": "Memory optimized",
+   "description": "$0.3192 per On Demand Linux r7i.xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1726.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.21115,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3312.0
+    }
+   },
+   "sku": "YVMFTHDGGU55JKGD",
+   "usd_per_hour": 0.3192,
+   "vcpu": 4
+  },
+  "t3.2xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.384 per On Demand Linux t3.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1978.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.2419,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3794.0
+    }
+   },
+   "sku": "7X63DAK78VTPCW8F",
+   "usd_per_hour": 0.384,
+   "vcpu": 8
+  },
+  "t3.large": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.096 per On Demand Linux t3.large Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 494.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0605,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 949.0
+    }
+   },
+   "sku": "6GR6HHW9M8KXFW8G",
+   "usd_per_hour": 0.096,
+   "vcpu": 2
+  },
+  "t3.medium": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.048 per On Demand Linux t3.medium Instance Hour",
+   "memory_gib": 4.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 247.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0302,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 474.0
+    }
+   },
+   "sku": "RP7JF6K2NBW9Y4SJ",
+   "usd_per_hour": 0.048,
+   "vcpu": 2
+  },
+  "t3.micro": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.012 per On Demand Linux t3.micro Instance Hour",
+   "memory_gib": 1.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 62.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0076,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 119.0
+    }
+   },
+   "sku": "9PBREHF5JRKB6RBE",
+   "usd_per_hour": 0.012,
+   "vcpu": 2
+  },
+  "t3.nano": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.006 per On Demand Linux t3.nano Instance Hour",
+   "memory_gib": 0.5,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 31.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0038,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 59.0
+    }
+   },
+   "sku": "CVRPW534R69RUEMP",
+   "usd_per_hour": 0.006,
+   "vcpu": 2
+  },
+  "t3.small": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.024 per On Demand Linux t3.small Instance Hour",
+   "memory_gib": 2.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 124.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0151,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 237.0
+    }
+   },
+   "sku": "XGAATXHUHNWXTMMR",
+   "usd_per_hour": 0.024,
+   "vcpu": 2
+  },
+  "t3.xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.192 per On Demand Linux t3.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 989.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.121,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1897.0
+    }
+   },
+   "sku": "KZ25CYAW7ZZ6SN5U",
+   "usd_per_hour": 0.192,
+   "vcpu": 4
+  },
+  "t3a.2xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.3456 per On Demand Linux t3a.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1780.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.2177,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3415.0
+    }
+   },
+   "sku": "F8CGM38936KU7KGW",
+   "usd_per_hour": 0.3456,
+   "vcpu": 8
+  },
+  "t3a.large": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.0864 per On Demand Linux t3a.large Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 445.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0544,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 854.0
+    }
+   },
+   "sku": "W2TKRCZGWBBYBYMF",
+   "usd_per_hour": 0.0864,
+   "vcpu": 2
+  },
+  "t3a.medium": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.0432 per On Demand Linux t3a.medium Instance Hour",
+   "memory_gib": 4.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 223.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0272,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 427.0
+    }
+   },
+   "sku": "FCTDXPA9FM2E8Y98",
+   "usd_per_hour": 0.0432,
+   "vcpu": 2
+  },
+  "t3a.micro": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.0108 per On Demand Linux t3a.micro Instance Hour",
+   "memory_gib": 1.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 56.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0068,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 107.0
+    }
+   },
+   "sku": "YYWPX2ZCJC7S7XYZ",
+   "usd_per_hour": 0.0108,
+   "vcpu": 2
+  },
+  "t3a.nano": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.0054 per On Demand Linux t3a.nano Instance Hour",
+   "memory_gib": 0.5,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 28.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0034,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 53.0
+    }
+   },
+   "sku": "8YXBW9KSGDJU89Z9",
+   "usd_per_hour": 0.0054,
+   "vcpu": 2
+  },
+  "t3a.small": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.0216 per On Demand Linux t3a.small Instance Hour",
+   "memory_gib": 2.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 111.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0136,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 213.0
+    }
+   },
+   "sku": "774XP29ZBNQKJHC3",
+   "usd_per_hour": 0.0216,
+   "vcpu": 2
+  },
+  "t3a.xlarge": {
+   "arm": false,
+   "category": "General purpose",
+   "description": "$0.1728 per On Demand Linux t3a.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 890.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.1089,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1707.0
+    }
+   },
+   "sku": "85S4P8X4W8SQNKYV",
+   "usd_per_hour": 0.1728,
+   "vcpu": 4
+  },
+  "t4g.2xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.3072 per On Demand Linux t4g.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1582.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.1934,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 3034.0
+    }
+   },
+   "sku": "HUW8BPP7J7H54CBT",
+   "usd_per_hour": 0.3072,
+   "vcpu": 8
+  },
+  "t4g.large": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.0768 per On Demand Linux t4g.large Instance Hour",
+   "memory_gib": 8.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 395.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0484,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 759.0
+    }
+   },
+   "sku": "FDHWMD494QE4PKCS",
+   "usd_per_hour": 0.0768,
+   "vcpu": 2
+  },
+  "t4g.medium": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.0384 per On Demand Linux t4g.medium Instance Hour",
+   "memory_gib": 4.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 198.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0242,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 379.0
+    }
+   },
+   "sku": "K7KVWC5Q4VNFBB9K",
+   "usd_per_hour": 0.0384,
+   "vcpu": 2
+  },
+  "t4g.micro": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.0096 per On Demand Linux t4g.micro Instance Hour",
+   "memory_gib": 1.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 49.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.006,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 95.0
+    }
+   },
+   "sku": "JWWVEAXAH3ZDGWHS",
+   "usd_per_hour": 0.0096,
+   "vcpu": 2
+  },
+  "t4g.nano": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.0048 per On Demand Linux t4g.nano Instance Hour",
+   "memory_gib": 0.5,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 25.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.003,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 47.0
+    }
+   },
+   "sku": "RZEMXGTKWM8M2V4K",
+   "usd_per_hour": 0.0048,
+   "vcpu": 2
+  },
+  "t4g.small": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.0192 per On Demand Linux t4g.small Instance Hour",
+   "memory_gib": 2.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 99.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0121,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 190.0
+    }
+   },
+   "sku": "WPA36YFSG5C5F3FP",
+   "usd_per_hour": 0.0192,
+   "vcpu": 2
+  },
+  "t4g.xlarge": {
+   "arm": true,
+   "category": "General purpose",
+   "description": "$0.1536 per On Demand Linux t4g.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "reserved": {
+    "1yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 791.0
+    },
+    "1yr_no_upfront": {
+     "hourly": 0.0967,
+     "upfront": 0.0
+    },
+    "3yr_all_upfront": {
+     "hourly": 0.0,
+     "upfront": 1517.0
+    }
+   },
+   "sku": "TFWK7SK39A9NXKT4",
+   "usd_per_hour": 0.1536,
+   "vcpu": 4
+  }
+ },
+ "other": {
+  "ebs_gp2_gb_month": {
+   "description": "$0.119 per GB-month of General Purpose SSD (gp2) provisioned storage - EU (Frankfurt)",
+   "sku": "WHD78M63XVBREKT5",
+   "unit": "GB-Mo",
+   "usd": 0.119
+  },
+  "ebs_gp3_gb_month": {
+   "description": "$0.0952 per GB-month of General Purpose (gp3) provisioned storage - EU (Frankfurt)",
+   "sku": "43AUDFP7M3XV6YHQ",
+   "unit": "GB-Mo",
+   "usd": 0.0952
+  },
+  "ebs_gp3_iops_month": {
+   "description": "$0.006 per provisioned IOPS-month of gp3 - EU (Frankfurt)",
+   "sku": "8AGS2P58KKNUHB49",
+   "unit": "IOPS-Mo",
+   "usd": 0.006
+  },
+  "ebs_gp3_mbps_month": {
+   "description": "$0.0476 per provisioned MiBps-month of gp3 - EU (Frankfurt)",
+   "sku": "GRZF7WF5ECWS5FS2",
+   "unit": "MiBps-Mo",
+   "usd": 0.0476
+  },
+  "ebs_sc1_gb_month": {
+   "description": "$0.018 per GB-month of Cold HDD (sc1) provisioned storage - EU (Frankfurt)",
+   "sku": "ZYSKSVGZYKJ85CXE",
+   "unit": "GB-Mo",
+   "usd": 0.018
+  },
+  "ebs_snapshot_gb_month": {
+   "description": "$0.054 per GB-Month of snapshot data stored - EU (Frankfurt)",
+   "sku": "42HPMPRPNWRJYGZM",
+   "unit": "GB-Mo",
+   "usd": 0.054
+  },
+  "ebs_st1_gb_month": {
+   "description": "$0.054 per GB-month of Throughput Optimized HDD (st1) provisioned storage - EU (F rankfurt)",
+   "sku": "MSGXHGPU2XUF77P6",
+   "unit": "GB-Mo",
+   "usd": 0.054
+  },
+  "ebs_standard_gb_month": {
+   "description": "$0.059 per GB-month of Magnetic provisioned storage - EU (Frankfurt)",
+   "sku": "WZCW2T5BKNTTAJG9",
+   "unit": "GB-Mo",
+   "usd": 0.059
+  },
+  "public_ipv4_idle_hour": {
+   "description": "$0.005 per Idle public IPv4 address per hour",
+   "sku": "KH2J39MVHUU7XNG2",
+   "unit": "Hrs",
+   "usd": 0.005
+  },
+  "public_ipv4_inuse_hour": {
+   "description": "$0.005 per In-use public IPv4 address per hour",
+   "sku": "P6D6UQPC87KFKK3N",
+   "unit": "Hrs",
+   "usd": 0.005
+  },
+  "s3_standard_gb_month": {
+   "description": "$0.0245 per GB - first 50 TB / month of storage used",
+   "sku": "NRYRNCXF5TWHB476",
+   "unit": "GB-Mo",
+   "usd": 0.0245
+  }
+ },
+ "region": "eu-central-1",
+ "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/eu-central-1/index.csv (+ AmazonS3)"
+}

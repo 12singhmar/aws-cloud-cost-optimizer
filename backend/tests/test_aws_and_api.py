@@ -41,12 +41,10 @@ def test_scan_reads_a_fake_account(fake_aws):
 
 def test_api_scan_then_report(fake_aws, tmp_path, monkeypatch):
     monkeypatch.setattr(main, "SCAN_DIR", tmp_path)
-    monkeypatch.setattr(main, "PROFILE", None)
-    monkeypatch.setattr(main, "REGION", REGION)
     fake_aws.client("ec2").allocate_address(Domain="vpc")
     client = TestClient(main.app)
 
-    assert client.get("/api/status").json()["connected"] is True
+    assert client.post("/api/connect", json={"region": REGION}).json()["connected"] is True
     scan_id = client.post("/api/scan").json()["id"]
     report = client.get(f"/api/report/{scan_id}").json()
     # (moto also pre-loads its own fake snapshots, so check only our IP)
@@ -54,10 +52,20 @@ def test_api_scan_then_report(fake_aws, tmp_path, monkeypatch):
     assert client.get("/api/scans").json()[0]["id"] == scan_id
 
 
-def test_status_without_credentials(monkeypatch):
-    monkeypatch.setattr(main, "session", lambda: (_ for _ in ()).throw(
-        __import__("botocore.exceptions").exceptions.NoCredentialsError()))
-    assert main.status()["connected"] is False
+def test_connect_with_unknown_profile_fails_cleanly():
+    client = TestClient(main.app)
+    result = client.post("/api/connect", json={"profile": "no-such-profile"}).json()
+    assert result["connected"] is False and "no-such-profile" in result["error"]
+    client.post("/api/connect", json={})        # reset
+
+
+def test_optimize_and_usage_endpoints():
+    client = TestClient(main.app)
+    r = client.post("/api/optimize", json={"instance_type": "m5.xlarge", "peak_cpu": 25, "avg_cpu": 8})
+    assert r.status_code == 200 and r.json()["optimized_monthly"] < r.json()["baseline_monthly"]
+    assert client.post("/api/optimize", json={"instance_type": "x9.huge"}).status_code == 400
+    servers = client.get("/api/usage/public-nab-ec2").json()["servers"]
+    assert len(servers) == 8 and all(s["workload"]["region"] == "us-east-1" for s in servers)
 
 
 def test_public_data_report_and_bad_ids():

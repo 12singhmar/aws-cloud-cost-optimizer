@@ -47,7 +47,9 @@ class EbsSnapshot(BaseModel):
 
 class Metrics(BaseModel):
     """Hourly CloudWatch values, oldest first. None = no data for that hour."""
-    cpu: list[Optional[float]]
+    start: Optional[datetime] = None                  # time of the first hour (UTC)
+    cpu: list[Optional[float]]                        # hourly average CPU %
+    cpu_max: list[Optional[float]] = Field(default_factory=list)   # hourly maximum CPU %
     network_in: list[Optional[float]] = Field(default_factory=list)   # bytes per hour; empty = not recorded
 
 

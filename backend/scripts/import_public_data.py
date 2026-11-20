@@ -39,12 +39,15 @@ def download(name: str) -> list[tuple[datetime, float]]:
              float(r["value"])) for r in csv.DictReader(io.StringIO(text))]
 
 
-def to_hourly(points: list[tuple[datetime, float]]) -> list[float]:
-    """Average the 5-minute readings inside each hour (what CloudWatch's hourly Average gives)."""
+def to_hourly(points: list[tuple[datetime, float]]) -> tuple[datetime, list[float], list[float]]:
+    """Group the 5-minute readings by hour: (first hour, hourly averages, hourly maximums).
+    This is what CloudWatch returns for Statistics=Average / Maximum with Period=3600."""
     hours: dict[datetime, list[float]] = {}
     for t, v in points:
         hours.setdefault(t.replace(minute=0, second=0), []).append(v)
-    return [round(sum(vals) / len(vals), 3) for _, vals in sorted(hours.items())]
+    ordered = sorted(hours.items())
+    return (ordered[0][0], [round(sum(v) / len(v), 3) for _, v in ordered],
+            [round(max(v), 3) for _, v in ordered])
 
 
 def main() -> None:
@@ -54,7 +57,8 @@ def main() -> None:
         iid = f"nab-{name}"
         instances.append(Instance(id=iid, name=f"ec2_cpu_utilization_{name}", type=ASSUMED_TYPE,
                                   state="running", launch_time=points[0][0]))
-        metrics[iid] = Metrics(cpu=to_hourly(points))
+        start, avg, mx = to_hourly(points)
+        metrics[iid] = Metrics(start=start, cpu=avg, cpu_max=mx)
         ends.append(points[-1][0])
         print(f"{iid}: {len(points)} readings -> {len(metrics[iid].cpu)} hours")
 

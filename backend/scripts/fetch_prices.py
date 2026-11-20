@@ -27,7 +27,14 @@ BASE = "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws"
 OUT_DIR = Path(__file__).resolve().parents[1] / "data" / "prices"
 
 # Instance families we price. Keeping the list short keeps the JSON small.
-FAMILIES = ("t2", "t3", "t3a", "t4g", "m5", "m6i", "m7i", "c5", "c6i", "r5", "r6i")
+FAMILIES = (
+    "t3", "t3a", "t4g",                    # burstable (t4g = ARM / Graviton)
+    "m5", "m6i", "m7i", "m6g", "m7g",      # general purpose
+    "c5", "c6i", "c7i", "c6g", "c7g",      # compute optimized
+    "r5", "r6i", "r7i", "r6g", "r7g",      # memory optimized
+)
+# Standard Reserved Instance terms we keep (lease_purchase-option)
+RESERVED_TERMS = ("1yr_no_upfront", "1yr_all_upfront", "3yr_all_upfront")
 
 # usageType suffix -> our key. AWS prefixes usage types with a region code
 # (e.g. "APS3-EBS:VolumeUsage.gp3"), so we match on the part after the prefix.
@@ -79,13 +86,14 @@ def fetch(region: str) -> dict:
 
     meta, rows = _stream_csv(f"{BASE}/AmazonEC2/current/{region}/index.csv")
     print(f"EC2 price list version {meta.get('Version')} - streaming...")
+    reserved: dict[str, dict] = {}
     for r in rows:
-        if r["TermType"] != "OnDemand" or r["Location Type"] != "AWS Region":
+        if r["Location Type"] != "AWS Region":
             continue
         family = r["Product Family"]
         if family == "Compute Instance":
             itype = r["Instance Type"]
-            if (
+            if not (
                 itype.split(".")[0] in FAMILIES
                 and r["Tenancy"] == "Shared"
                 and r["Operating System"] == "Linux"
@@ -93,17 +101,34 @@ def fetch(region: str) -> dict:
                 and r["CapacityStatus"] == "Used"
                 and r["License Model"] == "No License required"
             ):
+                continue
+            if r["TermType"] == "OnDemand":
                 prices["instances"][itype] = {
                     "usd_per_hour": float(r["PricePerUnit"]),
                     "vcpu": int(r["vCPU"]),
                     "memory_gib": float(r["Memory"].split()[0].replace(",", "")),
+                    "category": r["Instance Family"],          # General purpose, Compute optimized...
+                    "arm": "Graviton" in r["Physical Processor"],
                     "sku": r["SKU"],
                     "description": r["PriceDescription"],
                 }
-        else:
+            elif r["TermType"] == "Reserved" and r["OfferingClass"] == "standard":
+                # Reserved Instance price: an upfront part ("Quantity") and/or an hourly part ("Hrs")
+                key = f"{r['LeaseContractLength']}_{r['PurchaseOption'].lower().replace(' ', '_')}"
+                if key not in RESERVED_TERMS:
+                    continue
+                term = reserved.setdefault(itype, {}).setdefault(key, {"upfront": 0.0, "hourly": 0.0})
+                if r["Unit"] == "Quantity":
+                    term["upfront"] = float(r["PricePerUnit"])
+                else:
+                    term["hourly"] = float(r["PricePerUnit"])
+        elif r["TermType"] == "OnDemand":
             key = EC2_OTHER.get(_suffix(r["usageType"]))
             if key and float(r["PricePerUnit"]) > 0 and key not in prices["other"]:
                 prices["other"][key] = _entry(r)
+    for itype, terms in reserved.items():
+        if itype in prices["instances"]:
+            prices["instances"][itype]["reserved"] = terms
 
     _, rows = _stream_csv(f"{BASE}/AmazonVPC/current/{region}/index.csv")
     print("VPC price list - streaming...")
