@@ -5,8 +5,7 @@ function Finding({ f, open, onToggle }) {
   return (
     <div className={'step' + (open ? ' applied' : '')}>
       <button className="step-head" onClick={onToggle}>
-        <span className="step-icon" aria-hidden="true">!</span>
-        <span className="step-title">{f.title}<span className="muted"> · {f.rule}</span></span>
+                <span className="step-title">{f.title}<span className="muted"> · {f.rule}</span></span>
         <span className="saving">{money(f.monthly_cost)}/mo</span>
       </button>
       {open && (
@@ -53,11 +52,6 @@ export default function Account({ status, scans, onConnect, onScanned, go }) {
         <h2>Connect your AWS account</h2>
         <p className="muted">The tool reads your account with read-only calls (describe / get). It never changes,
           stops or deletes anything. Your keys stay in the AWS CLI on this computer; they are never typed into this page.</p>
-        <ul className="ticks">
-          <li>Finds unattached disks, unused IPs, stopped servers, orphaned snapshots and idle servers</li>
-          <li>Prices each problem with the real AWS price list</li>
-          <li>Sends real CPU history to Usage Analysis and the Cost Planner</li>
-        </ul>
         <button className="primary" onClick={onConnect}>Connect AWS</button>
       </div>
     )
@@ -77,12 +71,12 @@ export default function Account({ status, scans, onConnect, onScanned, go }) {
               {awsScans.map((s) => <option key={s.id} value={s.id}>{new Date(s.scanned_at).toLocaleString()}</option>)}
             </select>
           )}
-          <button className="primary" onClick={scan} disabled={busy || !status.prices_available}>{busy ? 'Scanning…' : 'Scan now'}</button>
+          <button className="primary" onClick={scan} disabled={busy || !status.prices_available}>{busy ? 'Scanning...' : 'Scan now'}</button>
         </div>
       </div>
       {!status.prices_available && <div className="panel warning">No prices saved for {status.region}. Run: python scripts/fetch_prices.py --region {status.region}</div>}
       {error && <div className="panel error">{error}</div>}
-      {!scanId && <div className="panel muted">No scan yet. Click “Scan now” — it takes a few seconds.</div>}
+      {!scanId && <div className="panel muted">No scan yet. Click Scan now.</div>}
 
       {report && (
         <>
@@ -94,8 +88,8 @@ export default function Account({ status, scans, onConnect, onScanned, go }) {
           </div>
           <div className="panel">
             <div className="panel-head"><h2>Waste found</h2>
-              <button className="link" onClick={() => go('usage')}>Analyze server usage →</button></div>
-            {report.findings.length === 0 && <p className="muted">Nothing wasted. Nice.</p>}
+              <button className="link" onClick={() => go('usage')}>Check server usage</button></div>
+            {report.findings.length === 0 && <p className="muted">No waste found.</p>}
             {report.findings.map((f) => (
               <Finding key={f.resource_id + f.rule} f={f} open={open === f.resource_id}
                 onToggle={() => setOpen(open === f.resource_id ? null : f.resource_id)} />

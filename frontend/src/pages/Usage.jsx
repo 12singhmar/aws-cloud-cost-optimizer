@@ -58,7 +58,7 @@ function Detail({ s, source, onOptimize }) {
         </>
       )}
 
-      {s.workload && <button className="primary" onClick={() => onOptimize(s.workload, note)}>Optimize this server →</button>}
+      {s.workload && <button className="primary" onClick={() => onOptimize(s.workload, note)}>Optimize</button>}
     </div>
   )
 }
@@ -86,13 +86,13 @@ export default function Usage({ scans, onOptimize }) {
       <div className="panel">
         <div className="panel-head">
           <h2>Servers</h2>
-          <select value={scanId} onChange={(e) => setScanId(e.target.value)} aria-label="Data source">
+          {scans.length > 1 && <select value={scanId} onChange={(e) => setScanId(e.target.value)} aria-label="Data source">
             {scans.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.source === 'public' ? 'Public AWS dataset (8 servers)' : `Your account, ${new Date(s.scanned_at).toLocaleString()}`}
               </option>
             ))}
-          </select>
+          </select>}
         </div>
         {data?.scan.description && <p className="muted small">{data.scan.description}</p>}
         {error && <p className="error-text">{error}</p>}

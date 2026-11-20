@@ -268,7 +268,7 @@ def choose_storage(p, w: Workload, state: dict) -> dict:
     if after >= before:
         return skip("storage", "Disk type", "gp3 would not be cheaper for this disk.")
     state["storage"] = after
-    return {"lever": "storage", "title": "Disk type gp2 -> gp3", "applied": True,
+    return {"lever": "storage", "title": "Disk type gp2 to gp3", "applied": True,
             "saving": round(before - after, 2), "details": [
                 f"gp2 {w.storage_gb} GB gives {gp2_iops:,} IOPS and up to {gp2_mbps} MiB/s.",
                 f"gp3 includes 3,000 IOPS and 125 MiB/s; to match we add {extra_iops:,} IOPS and "

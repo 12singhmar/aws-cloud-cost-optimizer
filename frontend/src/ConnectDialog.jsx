@@ -64,7 +64,7 @@ export default function ConnectDialog({ regions, onClose, onConnected }) {
         {error && <p className="error-text">{error}</p>}
         <div className="row end">
           <button onClick={onClose}>Cancel</button>
-          <button className="primary" onClick={connect} disabled={busy}>{busy ? 'Connecting…' : 'Connect'}</button>
+          <button className="primary" onClick={connect} disabled={busy}>{busy ? 'Connecting...' : 'Connect'}</button>
         </div>
       </div>
     </div>
