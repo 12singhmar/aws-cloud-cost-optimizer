@@ -1,164 +1,160 @@
 import { useEffect, useState } from 'react'
-import { api, date, usd } from './api.js'
-import Backtest from './pages/Backtest.jsx'
-import BillCheck from './pages/BillCheck.jsx'
-import Findings from './pages/Findings.jsx'
-import Fleet from './pages/Fleet.jsx'
-import Lab from './pages/Lab.jsx'
-import Method from './pages/Method.jsx'
-import Overview from './pages/Overview.jsx'
+import { getReport, getScans, getStatus, money, runScan } from './api.js'
 
-const PAGES = [
-  { id: 'overview', label: 'Overview', group: 'Account' },
-  { id: 'findings', label: 'Findings', group: 'Account' },
-  { id: 'backtest', label: 'Backtest', group: 'Proof' },
-  { id: 'lab', label: 'Waste Lab', group: 'Proof' },
-  { id: 'bill', label: 'Bill Check', group: 'Proof' },
-  { id: 'fleet', label: 'Fleet Study', group: 'Research' },
-  { id: 'method', label: 'How it works', group: 'Research' },
-]
-
-const pageFromHash = () => {
-  const id = window.location.hash.replace('#/', '')
-  return PAGES.some((p) => p.id === id) ? id : 'overview'
+function Connection({ status, scanning, onScan }) {
+  if (!status) return <span className="pill">Checking AWS…</span>
+  if (!status.connected) return <span className="pill bad">Not connected to AWS</span>
+  return (
+    <div className="row">
+      <span className="pill good">Connected · {status.account} · {status.region}</span>
+      <button onClick={onScan} disabled={scanning || !status.prices_available}>
+        {scanning ? 'Scanning…' : 'Scan now'}
+      </button>
+    </div>
+  )
 }
 
-function readTheme() {
-  try { return localStorage.getItem('theme') } catch { return null }
+function ConnectHelp({ status }) {
+  return (
+    <div className="box">
+      <h3>Connect your AWS account</h3>
+      <ol>
+        <li>Install the AWS CLI (version 2.32 or newer).</li>
+        <li>Sign in from a terminal: <code>aws login --profile ccx</code></li>
+        <li>Start the backend with that profile: <code>set AWS_PROFILE=ccx</code> then <code>uvicorn app.main:app</code></li>
+      </ol>
+      {status?.error && <p className="muted small">AWS said: {status.error}</p>}
+    </div>
+  )
+}
+
+function Finding({ f, open, onToggle }) {
+  return (
+    <div className={'finding' + (open ? ' open' : '')}>
+      <button className="finding-head" onClick={onToggle}>
+        <span>
+          <b>{f.title}</b>
+          <span className="muted small"> · {f.rule}</span>
+        </span>
+        <span className="cost">{money(f.monthly_cost)}/mo</span>
+      </button>
+      {open && (
+        <div className="finding-body">
+          <p>{f.why}</p>
+          <h4>What we saw</h4>
+          <table>
+            <tbody>
+              {Object.entries(f.evidence).map(([k, v]) => <tr key={k}><td className="muted">{k}</td><td>{v}</td></tr>)}
+            </tbody>
+          </table>
+          <h4>How the cost is calculated</h4>
+          <ul>{f.calculation.map((c) => <li key={c}>{c}</li>)}</ul>
+          <p className="muted small">AWS price used: {f.prices_used.join('; ')}</p>
+          <h4>How to fix it</h4>
+          {f.fix.map((c) => <pre key={c}>{c}</pre>)}
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default function App() {
-  const [page, setPage] = useState(pageFromHash)
-  const [snapshots, setSnapshots] = useState([])
-  const [snapId, setSnapId] = useState(null)
-  const [data, setData] = useState(null)        // { analysis, lab, bill }
-  const [shared, setShared] = useState({})      // fleet, rules, prices (not per snapshot)
-  const [selected, setSelected] = useState(null)
+  const [status, setStatus] = useState(null)
+  const [scans, setScans] = useState([])
+  const [scanId, setScanId] = useState(null)
+  const [report, setReport] = useState(null)
+  const [openId, setOpenId] = useState(null)
+  const [scanning, setScanning] = useState(false)
   const [error, setError] = useState(null)
-  const [theme, setTheme] = useState(readTheme)
+
+  const loadScans = (select) =>
+    getScans().then((list) => {
+      setScans(list)
+      setScanId(select || list[0]?.id || null)
+    })
 
   useEffect(() => {
-    const onHash = () => setPage(pageFromHash())
-    window.addEventListener('popstate', onHash)
-    window.addEventListener('hashchange', onHash)
-    return () => {
-      window.removeEventListener('popstate', onHash)
-      window.removeEventListener('hashchange', onHash)
+    getStatus().then(setStatus).catch(() => setStatus({ connected: false, error: 'Backend is not running.' }))
+    loadScans().catch((e) => setError(e.message))
+  }, [])
+
+  useEffect(() => {
+    if (!scanId) return
+    getReport(scanId).then((r) => { setReport(r); setError(null) }).catch((e) => setError(e.message))
+  }, [scanId])
+
+  async function scan() {
+    setScanning(true)
+    setError(null)
+    try {
+      const { id } = await runScan()
+      await loadScans(id)
+    } catch (e) {
+      setError(e.message)
     }
-  }, [])
-
-  useEffect(() => {
-    if (theme) document.documentElement.dataset.theme = theme
-    else delete document.documentElement.dataset.theme
-    try { theme ? localStorage.setItem('theme', theme) : localStorage.removeItem('theme') } catch { /* private mode */ }
-  }, [theme])
-
-  useEffect(() => {
-    Promise.all([api.snapshots(), api.fleet(), api.rules()])
-      .then(([snaps, fleet, rules]) => {
-        setSnapshots(snaps)
-        setShared((s) => ({ ...s, fleet, rules }))
-        setSnapId(snaps[0]?.id ?? null)
-      })
-      .catch((e) => setError(e.message))
-  }, [])
-
-  useEffect(() => {
-    if (!snapId) return
-    let live = true
-    Promise.all([api.analysis(snapId), api.lab(snapId), api.bill(snapId)])
-      .then(([analysis, lab, bill]) => {
-        if (!live) return
-        setData({ analysis, lab, bill })
-        setSelected(null)
-        api.prices(analysis.snapshot.region).then((prices) => live && setShared((s) => ({ ...s, prices })))
-      })
-      .catch((e) => live && setError(e.message))
-    return () => { live = false }
-  }, [snapId])
-
-  const go = (id, findingId) => {
-    if (findingId) setSelected(findingId)
-    window.history.pushState(null, '', `#/${id}`)   // keeps Back button working
-    setPage(id)
-    window.scrollTo(0, 0)
+    setScanning(false)
   }
 
-  const snap = snapshots.find((s) => s.id === snapId)
-  const isDark = theme === 'dark' || (!theme && window.matchMedia?.('(prefers-color-scheme: dark)').matches)
-  const counts = data && {
-    findings: data.analysis.summary.findings,
-    backtest: data.analysis.backtests.length || null,
-  }
-
-  let body
-  if (error) {
-    body = (
-      <div className="error-box">
-        <b>Cannot reach the backend.</b> {error}
-        <p className="small" style={{ marginTop: 6 }}>Start it with: <span className="mono">cd backend &amp;&amp; uvicorn app.main:app --reload</span></p>
-      </div>
-    )
-  } else if (!data) {
-    body = <div className="loading">Loading analysis…</div>
-  } else {
-    const props = { ...data, ...shared, go }
-    body = {
-      overview: <Overview {...props} />,
-      findings: <Findings {...props} selected={selected} onSelect={setSelected} />,
-      backtest: <Backtest {...props} />,
-      lab: <Lab {...props} />,
-      bill: <BillCheck {...props} />,
-      fleet: <Fleet {...props} />,
-      method: <Method rules={shared.rules || []} prices={shared.prices} />,
-    }[page]
-  }
+  const current = scans.find((s) => s.id === scanId)
 
   return (
-    <div className="shell">
-      <aside className="sidebar">
-        <div className="brand">
-          <div className="brand-mark" aria-hidden="true">$</div>
-          <div>
-            <div className="brand-name">Cloud Cost Optimizer</div>
-            <div className="brand-sub">recommendations you can check</div>
-          </div>
+    <div className="page">
+      <header>
+        <div>
+          <h1>Cloud Cost Optimizer</h1>
+          <p className="muted">Finds AWS resources you are paying for but not using.</p>
         </div>
-        <nav className="nav" aria-label="Pages">
-          {PAGES.map((p, k) => {
-            const header = k === 0 || PAGES[k - 1].group !== p.group
-              ? <div className="nav-group" key={p.group}>{p.group}</div> : null
-            return [header, (
-              <button key={p.id} aria-current={page === p.id ? 'page' : undefined} onClick={() => go(p.id)}>
-                {p.label}
-                {counts?.[p.id] ? <span className="count">{counts[p.id]}</span> : null}
-              </button>
-            )]
-          })}
-        </nav>
-        <div className="sidebar-foot">Read-only · never changes your AWS account</div>
-      </aside>
+        <Connection status={status} scanning={scanning} onScan={scan} />
+      </header>
 
-      <div className="main">
-        <div className="topbar">
-          <label className="small muted" htmlFor="snap">Snapshot</label>
-          <select id="snap" value={snapId ?? ''} onChange={(e) => setSnapId(e.target.value)}>
-            {snapshots.map((s) => (
-              <option key={s.id} value={s.id}>{s.source === 'demo' ? 'Demo account (synthetic)' : `${s.account} · ${s.id}`}</option>
+      {status && !status.connected && <ConnectHelp status={status} />}
+      {status?.connected && !status.prices_available && (
+        <div className="box bad">No prices saved for {status.region}. Run <code>python scripts/fetch_prices.py --region {status.region}</code></div>
+      )}
+      {error && <div className="box bad">{error}</div>}
+
+      {scans.length > 0 && (
+        <div className="row">
+          <label className="muted" htmlFor="scan">Showing</label>
+          <select id="scan" value={scanId || ''} onChange={(e) => { setScanId(e.target.value); setOpenId(null) }}>
+            {scans.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.source === 'sample' ? 'Sample data (not a real account)' : `${s.account} · ${new Date(s.scanned_at).toLocaleString()}`}
+              </option>
             ))}
           </select>
-          {snap && (snap.source === 'demo'
-            ? <span className="badge demo">● Demo data</span>
-            : <span className="badge real">● Real AWS account</span>)}
-          {snap && <span className="small muted">{snap.region} · collected {date(snap.collected_at)}</span>}
-          <span className="spacer" />
-          {data && <span className="small muted">Savings found: <b style={{ color: 'var(--text)' }}>{usd(data.analysis.summary.potential_savings)}/mo</b></span>}
-          <button className="btn" onClick={() => setTheme(isDark ? 'light' : 'dark')} aria-label="Toggle dark mode">
-            {isDark ? '☀ Light' : '☾ Dark'}
-          </button>
+          {current && <span className={'pill ' + (current.source === 'aws' ? 'good' : 'warn')}>{current.source === 'aws' ? 'Real AWS data' : 'Sample data'}</span>}
         </div>
-        <main className="content">{body}</main>
-      </div>
+      )}
+
+      {report && (
+        <>
+          <div className="cards">
+            <div className="card"><span className="muted">Monthly cost of scanned resources</span><b>{money(report.monthly_cost)}</b></div>
+            <div className="card"><span className="muted">Wasted per month</span><b className="accent">{money(report.monthly_waste)}</b></div>
+            <div className="card"><span className="muted">Problems found</span><b>{report.findings.length}</b></div>
+          </div>
+          <p className="muted small">
+            Scanned {report.counts.instances} servers, {report.counts.volumes} disks, {report.counts.elastic_ips} IPs
+            and {report.counts.snapshots} snapshots in {report.scan.region}. Prices from the AWS Price List
+            (version {report.price_list_version}), before free-tier credits.
+          </p>
+
+          <h2>Findings</h2>
+          {report.findings.length === 0 && <div className="box">No waste found.</div>}
+          {report.findings.map((f) => (
+            <Finding key={f.resource_id + f.rule} f={f} open={openId === f.resource_id}
+              onToggle={() => setOpenId(openId === f.resource_id ? null : f.resource_id)} />
+          ))}
+
+          {report.notes.length > 0 && (
+            <>
+              <h2>Not checked yet</h2>
+              <ul className="muted">{report.notes.map((n) => <li key={n}>{n}</li>)}</ul>
+            </>
+          )}
+        </>
+      )}
     </div>
   )
 }

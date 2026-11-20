@@ -1,154 +1,96 @@
-"""Each rule: one case that must fire, and the cases that must NOT fire."""
+import sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
-from app.analyzer import analyze, strip_lab_tags
-from app.models import Address, Bucket, EbsSnapshot, IncompleteUpload, Instance, Volume
-from conftest import ago, flat_metrics, make_snapshot
+import pytest
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-def run(**parts):
-    return analyze(make_snapshot(**parts))
+from app.models import EbsSnapshot, ElasticIp, Instance, Metrics, Scan, Volume  # noqa: E402
+from app.prices import load_prices  # noqa: E402
+from app.rules import build_report, volume_cost  # noqa: E402
 
-
-def rules_for(result, resource_id):
-    return [f["rule_id"] for f in result["findings"]
-            if f["resource_id"] == resource_id and f["status"] == "active"]
-
-
-def inst(iid="i-1", itype="m5.xlarge", state="running", **kw):
-    return Instance(id=iid, type=itype, state=state, launch_time=ago(100), **kw)
+NOW = datetime(2026, 11, 21, tzinfo=timezone.utc)
+P = load_prices("ap-south-1")
 
 
-# --- idle -------------------------------------------------------------------
-
-def test_idle_instance_is_flagged():
-    r = run(instances=[inst(itype="t3.micro")], metrics={"i-1": flat_metrics(0.5)})
-    assert rules_for(r, "i-1") == ["ec2-idle"]
+def scan(**parts):
+    return Scan(id="t", source="sample", account="x", region="ap-south-1", scanned_at=NOW, **parts)
 
 
-def test_low_cpu_but_busy_network_is_not_idle():
-    r = run(instances=[inst(itype="t3.nano")], metrics={"i-1": flat_metrics(0.5, net_kbps=200)})
-    assert "ec2-idle" not in rules_for(r, "i-1")
+def rules_hit(s):
+    return {(f["resource_id"], f["rule"]) for f in build_report(s, P)["findings"]}
 
 
-def test_too_little_data_gives_notice_not_finding():
-    r = run(instances=[inst()], metrics={"i-1": flat_metrics(0.5, hours=100)})
-    assert rules_for(r, "i-1") == []
-    assert any(n["resource_id"] == "i-1" for n in r["notices"])
+def vol(vid, state="available", **kw):
+    return Volume(id=vid, type="gp3", size_gb=10, state=state, created=NOW - timedelta(days=3), **kw)
 
 
-def test_missing_metrics_are_not_treated_as_zero():
-    m = flat_metrics(0.5)
-    m.cpu_avg = [None if k % 2 else v for k, v in enumerate(m.cpu_avg)]  # 50% coverage
-    r = run(instances=[inst()], metrics={"i-1": m})
-    assert rules_for(r, "i-1") == []
+def server(iid, state="running", **kw):
+    return Instance(id=iid, type="t3.micro", state=state, launch_time=NOW - timedelta(days=30), **kw)
 
 
-def test_young_instance_leading_gap_does_not_count_as_missing():
-    m = flat_metrics(0.5)
-    for k in range(96):             # instance launched 4 days into the 14-day window
-        m.cpu_avg[k] = m.cpu_max[k] = None
-    r = run(instances=[inst(itype="t3.micro")], metrics={"i-1": m})
-    assert rules_for(r, "i-1") == ["ec2-idle"]
+def test_unattached_volume_found_attached_ignored():
+    hits = rules_hit(scan(volumes=[vol("v-free"), vol("v-used", state="in-use")]))
+    assert hits == {("v-free", "Unattached EBS volume")}
 
 
-# --- rightsizing --------------------------------------------------------------
-
-def test_quiet_m5_is_downsized_with_correct_saving(pb):
-    r = run(instances=[inst()], metrics={"i-1": flat_metrics(8, peak=25)})
-    f = next(f for f in r["findings"] if f["resource_id"] == "i-1")
-    assert f["rule_id"] == "ec2-rightsize" and "m5.large" in f["title"]
-    assert f["monthly_savings"] == round(pb.instance_monthly("m5.xlarge") - pb.instance_monthly("m5.large"), 2)
-
-
-def test_peaky_instance_is_not_downsized():
-    # p95 of hourly max = 45% -> would be 90% after halving -> unsafe
-    r = run(instances=[inst()], metrics={"i-1": flat_metrics(8, peak=45)})
-    assert rules_for(r, "i-1") == []
+def test_gp3_only_charges_iops_above_free_3000():
+    base, calc, _ = volume_cost(vol("a", iops=3000, throughput=125), P)
+    extra, calc2, _ = volume_cost(vol("b", iops=4000, throughput=125), P)
+    assert base == pytest.approx(10 * P.get("ebs_gp3_gb_month"))
+    assert extra - base == pytest.approx(1000 * P.get("ebs_gp3_iops_month"))
+    assert len(calc) == 1 and len(calc2) == 2
 
 
-def test_boundary_just_under_40_percent_is_downsized():
-    r = run(instances=[inst()], metrics={"i-1": flat_metrics(8, peak=39.9)})
-    assert rules_for(r, "i-1") == ["ec2-rightsize"]
+def test_unused_elastic_ip():
+    hits = rules_hit(scan(elastic_ips=[ElasticIp(allocation_id="free", public_ip="1.1.1.1"),
+                                       ElasticIp(allocation_id="used", public_ip="2.2.2.2", attached_to="i-1")]))
+    assert hits == {("free", "Unused Elastic IP")}
 
 
-def test_smallest_size_has_nothing_to_downsize_to():
-    r = run(instances=[inst(itype="m5.large")], metrics={"i-1": flat_metrics(8, peak=20)})
-    assert rules_for(r, "i-1") == []
+def test_stopped_instance_charged_for_its_disk():
+    s = scan(instances=[server("i-1", state="stopped", volume_ids=["v-root"])],
+             volumes=[vol("v-root", state="in-use", attached_to="i-1")])
+    f = build_report(s, P)["findings"][0]
+    assert f["rule"] == "Stopped instance"
+    assert f["monthly_cost"] == round(10 * P.get("ebs_gp3_gb_month"), 2)
 
 
-def test_burstable_respects_cpu_credit_baseline():
-    # t3.small -> t3.micro baseline 10%, x0.8 margin = 8%. Avg 9% is too high.
-    r = run(instances=[inst(itype="t3.small")], metrics={"i-1": flat_metrics(9, peak=20)})
-    assert rules_for(r, "i-1") == []
-    r = run(instances=[inst(itype="t3.small")], metrics={"i-1": flat_metrics(5, peak=20)})
-    assert rules_for(r, "i-1") == ["ec2-rightsize"]
+def test_orphaned_snapshot_but_not_when_disk_exists_or_ami_uses_it():
+    snaps = [EbsSnapshot(id="gone", volume_id="v-x", volume_exists=False, size_gb=5, created=NOW),
+             EbsSnapshot(id="ok", volume_id="v-y", volume_exists=True, size_gb=5, created=NOW),
+             EbsSnapshot(id="ami", volume_id="v-z", volume_exists=False, used_by_ami=True, size_gb=5, created=NOW)]
+    assert rules_hit(scan(snapshots=snaps)) == {("gone", "Orphaned snapshot")}
 
 
-def test_idle_and_rightsize_never_both_fire():
-    r = run(instances=[inst()], metrics={"i-1": flat_metrics(0.5)})
-    assert rules_for(r, "i-1") == ["ec2-idle"]
+def week(cpu, net_bytes_per_hour, hours=14 * 24):
+    return Metrics(cpu=[cpu] * hours, network_in=[net_bytes_per_hour] * hours)
 
 
-# --- storage / network -----------------------------------------------------------
-
-def vol(vid="vol-1", state="available", days=30, **kw):
-    return Volume(id=vid, type="gp3", size_gb=10, state=state, create_time=ago(days), **kw)
-
-
-def test_unattached_volume_flagged_only_after_7_days():
-    r = run(volumes=[vol(), vol("vol-new", days=2), vol("vol-used", state="in-use")])
-    assert rules_for(r, "vol-1") == ["ebs-unattached"]
-    assert rules_for(r, "vol-new") == []
-    assert rules_for(r, "vol-used") == []
+def test_idle_instance_needs_low_cpu_and_low_network():
+    s = scan(instances=[server("idle"), server("busy-net"), server("busy-cpu")],
+             metrics={"idle": week(0.5, 1000), "busy-net": week(0.5, 200 * 1024 * 3600),
+                      "busy-cpu": week(40, 1000)})
+    assert rules_hit(s) == {("idle", "Idle instance")}
 
 
-def test_only_unassociated_elastic_ip_is_flagged():
-    r = run(addresses=[Address(allocation_id="a-idle", public_ip="1.1.1.1"),
-                       Address(allocation_id="a-used", public_ip="2.2.2.2", associated_with="i-9")])
-    assert rules_for(r, "a-idle") == ["eip-idle"]
-    assert rules_for(r, "a-used") == []
+def test_idle_rule_waits_for_7_days_and_says_so():
+    s = scan(instances=[server("new")], metrics={"new": week(0.5, 1000, hours=48)})
+    report = build_report(s, P)
+    assert report["findings"] == []
+    assert "only 48 hours" in report["notes"][0]
 
 
-def test_stopped_instance_needs_7_days_and_disks():
-    r = run(instances=[inst("i-old", "t3.small", "stopped", state_since=ago(20), volume_ids=["vol-r"]),
-                       inst("i-recent", "t3.small", "stopped", state_since=ago(2), volume_ids=["vol-r"])],
-            volumes=[vol("vol-r", state="in-use")])
-    assert rules_for(r, "i-old") == ["ec2-stopped"]
-    assert rules_for(r, "i-recent") == []
+def test_missing_hours_are_not_counted_as_zero():
+    m = week(0.5, 1000)
+    m.cpu = [None if k % 3 else v for k, v in enumerate(m.cpu)]   # only 1/3 of hours present
+    report = build_report(scan(instances=[server("gappy")], metrics={"gappy": m}), P)
+    assert report["findings"] == [] and report["notes"]
 
 
-def test_orphan_snapshot_only_when_volume_gone():
-    r = run(snapshots=[
-        EbsSnapshot(id="snap-gone", volume_id="vol-x", volume_exists=False, size_gb=5, start_time=ago(30)),
-        EbsSnapshot(id="snap-ok", volume_id="vol-y", volume_exists=True, size_gb=5, start_time=ago(30)),
-        EbsSnapshot(id="snap-ami", volume_id="vol-z", volume_exists=False, used_by_ami=True,
-                    size_gb=5, start_time=ago(30))])
-    assert rules_for(r, "snap-gone") == ["snapshot-orphan"]
-    assert rules_for(r, "snap-ok") == []
-    assert rules_for(r, "snap-ami") == []     # backing an AMI: deleting would break it
-
-
-def test_old_incomplete_uploads_flagged_and_lifecycle_rule_has_no_made_up_saving():
-    up = IncompleteUpload(key="k", initiated=ago(10), size_bytes=2**30)
-    r = run(buckets=[Bucket(name="b1", incomplete_uploads=[up]),
-                     Bucket(name="big", size_gb=100)])
-    assert rules_for(r, "b1") == ["s3-incomplete-uploads"]
-    lc = next(f for f in r["findings"] if f["rule_id"] == "s3-no-lifecycle")
-    assert lc["monthly_savings"] is None
-
-
-# --- fairness -------------------------------------------------------------------
-
-def test_lab_tags_are_hidden_from_the_detector():
-    s = make_snapshot(volumes=[vol(tags={"ccx-lab": "lab-1", "Name": "x"})])
-    clean = strip_lab_tags(s)
-    assert clean.volumes[0].tags == {"Name": "x"}
-    assert s.volumes[0].tags["ccx-lab"] == "lab-1"     # original not modified
-
-
-def test_every_finding_is_explained():
-    r = run(instances=[inst()], metrics={"i-1": flat_metrics(8, peak=25)},
-            volumes=[vol()], addresses=[Address(allocation_id="a", public_ip="1.1.1.1")])
-    for f in r["findings"]:
-        assert f["evidence"] and f["calculation"] and f["prices_used"] and f["fix_steps"]
-        assert all(p["sku"] for p in f["prices_used"])
+def test_every_finding_has_evidence_price_and_fix():
+    report = build_report(scan(volumes=[vol("v")], elastic_ips=[ElasticIp(allocation_id="e", public_ip="1.1.1.1")]), P)
+    assert report["monthly_waste"] > 0
+    for f in report["findings"]:
+        assert f["evidence"] and f["calculation"] and f["prices_used"] and f["fix"]

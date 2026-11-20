@@ -1,89 +1,100 @@
-"""HTTP API (FastAPI). Thin layer: every endpoint just calls a module.
+"""FastAPI backend.
 
-Read-only by design: there is no endpoint that changes anything in AWS.
-Run:  uvicorn app.main:app --reload     Docs: http://127.0.0.1:8000/docs
+GET  /api/status          are we connected to AWS?
+POST /api/scan            read the AWS account now and save the result
+GET  /api/scans           list saved scans
+GET  /api/report/{id}     findings for one saved scan
+
+Every scan is saved to data/scans/, so old results can be shown without AWS.
 """
 
 from __future__ import annotations
 
-import json
-from functools import lru_cache
+import os
+import re
+import threading
+from pathlib import Path
 
+from botocore.exceptions import BotoCoreError, ClientError
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from app import billcheck, lab
-from app.analyzer import analyze, strip_lab_tags
-from app.config import FLEET_FILE
-from app.pricing import load_pricebook
-from app.rules import RULE_CATALOG
-from app.store import list_snapshots, load_bill, load_lab, load_snapshot
+from app import aws
+from app.models import Scan
+from app.prices import available_regions, load_prices
+from app.rules import build_report
 
-app = FastAPI(title="AWS Cloud Cost Optimizer", version="2.0.0",
-              description="Read-only waste detection with checkable results.")
+SCAN_DIR = Path(__file__).resolve().parents[1] / "data" / "scans"
+SAFE_ID = re.compile(r"^[A-Za-z0-9_-]{1,60}$")
+
+# This runs on a laptop, not on an EC2 server, so skip the slow EC2 metadata lookup.
+os.environ.setdefault("AWS_EC2_METADATA_DISABLED", "true")
+
+# Which AWS profile to use. Set before starting:  set AWS_PROFILE=ccx  (Windows)
+PROFILE = os.environ.get("AWS_PROFILE")
+REGION = os.environ.get("AWS_REGION") or os.environ.get("AWS_DEFAULT_REGION")
+
+app = FastAPI(title="AWS Cloud Cost Optimizer")
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
-                   allow_methods=["GET"], allow_headers=["*"])
+                   allow_methods=["GET", "POST"], allow_headers=["*"])
+scan_lock = threading.Lock()
 
 
-def _snapshot(snapshot_id: str):
+def session():
+    return aws.make_session(PROFILE, REGION)
+
+
+@app.get("/api/status")
+def status():
     try:
-        return load_snapshot(snapshot_id)
-    except (FileNotFoundError, ValueError):
-        raise HTTPException(404, f"Snapshot '{snapshot_id}' not found")
+        info = aws.whoami(session())
+    except (BotoCoreError, ClientError) as e:
+        return {"connected": False, "error": str(e), "profile": PROFILE}
+    region = info["region"]
+    return {"connected": True, "profile": PROFILE, **info,
+            "prices_available": region in available_regions()}
 
 
-@lru_cache(maxsize=16)
-def _analysis(snapshot_id: str) -> dict:
-    return analyze(_snapshot(snapshot_id))
-
-
-@app.get("/api/health")
-def health():
-    return {"status": "ok", "version": app.version}
-
-
-@app.get("/api/snapshots")
-def snapshots():
-    return list_snapshots()
-
-
-@app.get("/api/rules")
-def rules():
-    return RULE_CATALOG
-
-
-@app.get("/api/analysis/{snapshot_id}")
-def analysis(snapshot_id: str):
-    return _analysis(snapshot_id)
-
-
-@app.get("/api/lab/{snapshot_id}")
-def lab_score(snapshot_id: str):
-    manifest = load_lab(snapshot_id)
-    if manifest is None:
-        return {"available": False}
-    return {"available": True, **lab.score(manifest, _analysis(snapshot_id)["findings"])}
-
-
-@app.get("/api/billcheck/{snapshot_id}")
-def bill_check(snapshot_id: str):
-    bill = load_bill(snapshot_id)
-    if bill is None:
-        return {"available": False}
-    s = strip_lab_tags(_snapshot(snapshot_id))
-    return {"available": True, **billcheck.compare(s, bill, load_pricebook(s.meta.region))}
-
-
-@app.get("/api/fleet")
-def fleet():
-    if not FLEET_FILE.exists():
-        return {"available": False}
-    return {"available": True, **json.loads(FLEET_FILE.read_text())}
-
-
-@app.get("/api/prices/{region}")
-def prices(region: str):
+@app.post("/api/scan")
+def scan_now():
+    if not scan_lock.acquire(blocking=False):
+        raise HTTPException(409, "A scan is already running")
     try:
-        return load_pricebook(region).summary()
+        sess = session()
+        if not sess.region_name:
+            raise HTTPException(400, "No region set. Use: aws configure set region <region> --profile <name>")
+        load_prices(sess.region_name)        # fail early if we have no prices for this region
+        result = aws.scan_account(sess)
+        SCAN_DIR.mkdir(parents=True, exist_ok=True)
+        (SCAN_DIR / f"{result.id}.json").write_text(result.model_dump_json(indent=1))
+        return {"id": result.id}
     except FileNotFoundError as e:
-        raise HTTPException(404, str(e))
+        raise HTTPException(400, str(e))
+    except (BotoCoreError, ClientError) as e:
+        raise HTTPException(502, f"AWS error: {e}")
+    finally:
+        scan_lock.release()
+
+
+@app.get("/api/scans")
+def list_scans():
+    scans = []
+    for path in SCAN_DIR.glob("*.json"):
+        s = Scan.model_validate_json(path.read_text())
+        scans.append({"id": s.id, "source": s.source, "account": s.account,
+                      "region": s.region, "scanned_at": s.scanned_at})
+    # newest real scans first, sample last
+    scans.sort(key=lambda s: (s["source"] == "aws", s["scanned_at"]), reverse=True)
+    return scans
+
+
+@app.get("/api/report/{scan_id}")
+def report(scan_id: str):
+    path = SCAN_DIR / f"{scan_id}.json"
+    if not SAFE_ID.match(scan_id) or not path.exists():
+        raise HTTPException(404, "Scan not found")
+    scan = Scan.model_validate_json(path.read_text())
+    try:
+        return build_report(scan, load_prices(scan.region))
+    except FileNotFoundError as e:
+        raise HTTPException(400, str(e))
