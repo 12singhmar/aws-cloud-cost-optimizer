@@ -1,0 +1,99 @@
+{
+ "lab_id": "demo",
+ "synthetic": true,
+ "created_at": "2026-10-11T12:00:00+00:00",
+ "region": "ap-south-1",
+ "items": [
+  {
+   "resource_id": "i-0idle0000000demo",
+   "kind": "EC2 instance",
+   "role": "waste",
+   "expected_rule": "ec2-idle",
+   "why": "Running, no CPU, no traffic"
+  },
+  {
+   "resource_id": "i-0proxy000000demo",
+   "kind": "EC2 instance",
+   "role": "decoy",
+   "expected_rule": null,
+   "why": "Near-zero CPU but steady network: it is working"
+  },
+  {
+   "resource_id": "i-0api00000000demo",
+   "kind": "EC2 instance",
+   "role": "waste",
+   "expected_rule": "ec2-rightsize",
+   "why": "Uses a fraction of an m5.xlarge"
+  },
+  {
+   "resource_id": "i-0batch000000demo",
+   "kind": "EC2 instance",
+   "role": "decoy",
+   "expected_rule": null,
+   "why": "Looks quiet, but runs a nightly job"
+  },
+  {
+   "resource_id": "i-0old00000000demo",
+   "kind": "EC2 instance",
+   "role": "waste",
+   "expected_rule": "ec2-stopped",
+   "why": "Stopped 20 days, disk still billed"
+  },
+  {
+   "resource_id": "vol-0orphan00000demo",
+   "kind": "EBS volume",
+   "role": "waste",
+   "expected_rule": "ebs-unattached",
+   "why": "Unattached for 40 days"
+  },
+  {
+   "resource_id": "vol-0fresh000000demo",
+   "kind": "EBS volume",
+   "role": "decoy",
+   "expected_rule": null,
+   "why": "Unattached, but only 2 days old"
+  },
+  {
+   "resource_id": "eipalloc-0idle00demo",
+   "kind": "Elastic IP",
+   "role": "waste",
+   "expected_rule": "eip-idle",
+   "why": "Reserved, attached to nothing"
+  },
+  {
+   "resource_id": "eipalloc-0web000demo",
+   "kind": "Elastic IP",
+   "role": "decoy",
+   "expected_rule": null,
+   "why": "Attached to a running server"
+  },
+  {
+   "resource_id": "snap-0orphan000demo",
+   "kind": "EBS snapshot",
+   "role": "waste",
+   "expected_rule": "snapshot-orphan",
+   "why": "Its volume was deleted"
+  },
+  {
+   "resource_id": "snap-0keep00000demo",
+   "kind": "EBS snapshot",
+   "role": "decoy",
+   "expected_rule": null,
+   "why": "Backup of a disk that still exists"
+  },
+  {
+   "resource_id": "demo-uploads",
+   "kind": "S3 bucket",
+   "role": "waste",
+   "expected_rule": "s3-incomplete-uploads",
+   "why": "3 abandoned uploads, 2.3 GB hidden"
+  },
+  {
+   "resource_id": "demo-static-site",
+   "kind": "S3 bucket",
+   "role": "decoy",
+   "expected_rule": null,
+   "why": "Small and has a lifecycle rule"
+  }
+ ]
+}

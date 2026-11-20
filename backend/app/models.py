@@ -1,286 +1,163 @@
-"""Domain and API schemas for AWS Cloud Cost Optimiser.
+"""Data shapes used across the app.
 
-Includes resource inventory, metrics, recommendations, dashboard models,
-and the Change Passport domain schemas. All financial values are represented
-as numeric floats with presentation helpers.
+Two groups:
+1. Snapshot*  - what we collected from an AWS account (the input).
+2. Finding... - what the analyser concludes (the output).
+
+A *snapshot* is a frozen copy of an account at one moment. We analyse snapshots,
+not the live account, so every result can be reproduced later (and the demo
+works in a viva with no internet or AWS keys).
 """
 
 from __future__ import annotations
 
-from enum import Enum
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Literal, Optional
+
 from pydantic import BaseModel, Field
 
-
-class ResourceType(str, Enum):
-    EC2 = "EC2"
-    EBS = "EBS"
-    S3 = "S3"
-    RDS = "RDS"
+# --------------------------------------------------------------------------
+# Input: account snapshot
+# --------------------------------------------------------------------------
 
 
-class Resource(BaseModel):
+class SnapshotMeta(BaseModel):
     id: str
-    name: str
-    resource_type: ResourceType
+    source: Literal["demo", "aws"]
     region: str
-    status: str
-    monthly_cost: float
-    tags: Dict[str, str] = Field(default_factory=dict)
-    details: Dict[str, Any] = Field(default_factory=dict)
+    account: str = "unknown"          # masked, e.g. "********1234"
+    collected_at: datetime            # analysis treats this moment as "now"
+    metric_days: int = 14
+    notes: str = ""
 
 
-class ResourceMetrics(BaseModel):
-    resource_id: str
-    observation_days: int
-    avg_cpu_percent: Optional[float] = None
-    peak_cpu_percent: Optional[float] = None
-    network_in_bytes_sec: Optional[float] = None
-    network_out_bytes_sec: Optional[float] = None
-    disk_iops: Optional[float] = None
-    current_storage_gb: Optional[float] = None
-    storage_growth_gb: Optional[float] = None
-    storage_growth_percent: Optional[float] = None
-    has_sufficient_data: bool = True
-    data_quality_warning: Optional[str] = None
+class Instance(BaseModel):
+    id: str
+    name: str = ""
+    type: str
+    state: str                        # running | stopped | ...
+    launch_time: datetime
+    state_since: Optional[datetime] = None   # when it entered the current state
+    volume_ids: list[str] = Field(default_factory=list)
+    public_ip: Optional[str] = None
+    tags: dict[str, str] = Field(default_factory=dict)
 
 
-class EvidenceItem(BaseModel):
+class Volume(BaseModel):
+    id: str
+    name: str = ""
+    type: str                         # gp3 | gp2 | st1 | sc1 | standard
+    size_gb: int
+    iops: Optional[int] = None
+    throughput: Optional[int] = None  # MiB/s (gp3 only)
+    state: str                        # in-use | available
+    create_time: datetime
+    attached_to: Optional[str] = None
+    tags: dict[str, str] = Field(default_factory=dict)
+
+
+class Address(BaseModel):
+    allocation_id: str
+    public_ip: str
+    associated_with: Optional[str] = None   # instance / network interface id
+    tags: dict[str, str] = Field(default_factory=dict)
+
+
+class EbsSnapshot(BaseModel):
+    id: str
+    volume_id: Optional[str] = None
+    volume_exists: bool = True
+    used_by_ami: bool = False         # deleting it would break that machine image
+    size_gb: int
+    start_time: datetime
+    description: str = ""
+    tags: dict[str, str] = Field(default_factory=dict)
+
+
+class IncompleteUpload(BaseModel):
+    key: str
+    initiated: datetime
+    size_bytes: int
+
+
+class Bucket(BaseModel):
+    name: str
+    size_gb: float = 0.0
+    has_lifecycle: bool = False
+    incomplete_uploads: list[IncompleteUpload] = Field(default_factory=list)
+    tags: dict[str, str] = Field(default_factory=dict)
+
+
+class InstanceMetrics(BaseModel):
+    """Hourly CloudWatch data. Index 0 = oldest hour. None = no datapoint."""
+    start: datetime
+    cpu_avg: list[Optional[float]]
+    cpu_max: list[Optional[float]]
+    net_in_bytes: list[Optional[float]] = Field(default_factory=list)  # Sum per hour
+
+
+class Snapshot(BaseModel):
+    meta: SnapshotMeta
+    instances: list[Instance] = Field(default_factory=list)
+    volumes: list[Volume] = Field(default_factory=list)
+    addresses: list[Address] = Field(default_factory=list)
+    snapshots: list[EbsSnapshot] = Field(default_factory=list)
+    buckets: list[Bucket] = Field(default_factory=list)
+    metrics: dict[str, InstanceMetrics] = Field(default_factory=dict)
+
+
+# --------------------------------------------------------------------------
+# Output: findings
+# --------------------------------------------------------------------------
+
+
+class Evidence(BaseModel):
     label: str
     value: str
 
 
-class Recommendation(BaseModel):
+class CalcStep(BaseModel):
+    """One line of the savings calculation, shown to the user as-is."""
+    text: str
+    usd: Optional[float] = None
+
+
+class PriceRef(BaseModel):
+    key: str
+    usd: float
+    unit: str
+    sku: str
+    description: str
+
+
+class Finding(BaseModel):
     id: str
-    resource_id: str
-    resource_name: Optional[str] = None
-    service: str  # e.g. "EC2", "EBS", "S3"
     rule_id: str
-    title: str
-    description: str
-    priority: str  # "HIGH", "MEDIUM", "LOW"
-    estimated_savings: Optional[float] = None
-    estimated_savings_formatted: Optional[str] = None
-    confidence: int  # 0 to 100
-    risk: str  # "Low", "Medium", "High"
-    reasoning: str
-    evidence: List[EvidenceItem] = Field(default_factory=list)
-    verification_guidance: str
-    savings_assumptions: Optional[str] = None
-    confidence_rationale: Optional[str] = None
-    risk_rationale: Optional[str] = None
-    observation_window: Optional[str] = None
-    data_quality_warnings: List[str] = Field(default_factory=list)
-    suggested_action: str = "Review in AWS Console"
-    aws_console_url: str = ""
-
-
-class ScenarioMetadata(BaseModel):
-    id: str
-    name: str
-    description: str
-    simulated: bool = True
-    expected_findings_summary: str
-    resource_count: int
-
-
-class MonthlyCostKPI(BaseModel):
-    value: float
-    formatted: str
-    change_percentage: float
-    change_type: str  # "increase", "decrease", "neutral"
-    label: str = "Monthly cost"
-    supporting_text: str
-
-
-class PotentialSavingsKPI(BaseModel):
-    value: float
-    formatted: str
-    percentage_of_spend: float
-    label: str = "Potential monthly savings"
-    supporting_text: str
-
-
-class FindingsCountKPI(BaseModel):
-    value: int
-    high_priority_count: int
-    medium_priority_count: int
-    low_priority_count: int
-    label: str = "Findings to review"
-    supporting_text: str
-
-
-class DashboardSummary(BaseModel):
-    monthly_cost: MonthlyCostKPI
-    potential_savings: PotentialSavingsKPI
-    findings_count: FindingsCountKPI
-
-
-class CostTrendPoint(BaseModel):
-    month: str
-    cost: float
-    label: str
-
-
-class ServiceSpendItem(BaseModel):
-    id: str
-    name: str
-    category: str
-    spend: float
-    formatted_spend: str
-    percentage: float
-    color: str
-
-
-class ActivityItem(BaseModel):
-    id: str
-    title: str
-    detail: str
-    time_ago: str
-    type: str  # "complete", "service", "warning", "simulation"
-
-
-class DashboardMetadata(BaseModel):
-    scenario_id: str
-    scenario_name: str
-    month: str
-    last_analysis: str
-    status_text: str
-    is_read_only: bool = True
-    is_simulated: bool = True
-    total_resources_scanned: int
-    data_limitations_active: bool = False
-    data_limitations_notice: Optional[str] = None
-
-
-class DashboardResponse(BaseModel):
-    metadata: DashboardMetadata
-    summary: DashboardSummary
-    cost_trend: List[CostTrendPoint]
-    service_spend: List[ServiceSpendItem]
-    priority_findings: List[Recommendation]
-    recent_activity: List[ActivityItem]
-
-
-# ---------------------------------------------------------------------------
-# Change Passport Domain Schemas
-# ---------------------------------------------------------------------------
-
-class ReviewCheckStatus(str, Enum):
-    PASSED = "PASSED"
-    REQUIRES_VERIFICATION = "REQUIRES_VERIFICATION"
-    BLOCKED = "BLOCKED"
-    NOT_APPLICABLE = "NOT_APPLICABLE"
-
-
-class ReviewCheckItem(BaseModel):
-    id: str
-    title: str
-    description: str
-    status: ReviewCheckStatus
-    evidence_or_requirement: str
-    user_attested: bool = False
-    attestation_note: Optional[str] = None
-
-
-class DepartmentReview(BaseModel):
-    department: str  # "Finance / FinOps", "Engineering", "Security / Compliance", "SRE / Operations"
-    status: ReviewCheckStatus
-    summary: str
-    checks: List[ReviewCheckItem] = Field(default_factory=list)
-
-
-class ProposedAction(BaseModel):
-    id: str
-    title: str
-    description: str
-    is_recommended: bool = False
-    projected_monthly_savings: float
-    projected_annual_savings: float
-    net_monthly_savings: float
-    risk_level: str
-    reversibility: str
-    action_type: str  # "snapshot_and_delete", "immediate_delete", "retain_and_tag"
-
-
-class ValidationCheckItem(BaseModel):
-    id: str
-    step_number: int
-    title: str
-    guidance: str
-    is_mandatory: bool = True
-
-
-class FinancialImpact(BaseModel):
-    estimated_avoidable_monthly_cost: float
-    annualized_avoidable_cost: float
-    projected_monthly_savings: float
-    projected_annual_savings: float
-    snapshot_cost_monthly: float
-    net_projected_savings_monthly: float
-    net_projected_savings_annual: float
-    realized_savings_status: str = "Unavailable — requires post-change billing telemetry"
-    calculation_breakdown: List[str] = Field(default_factory=list)
-    pricing_assumptions: List[str] = Field(default_factory=list)
-    exclusions_and_limitations: List[str] = Field(default_factory=list)
-
-
-class DecisionStatus(str, Enum):
-    NEEDS_REVIEW = "Needs review"
-    READY_FOR_SIMULATION = "Ready for simulation"
-    BLOCKED_BY_EVIDENCE = "Blocked by missing evidence"
-    SIMULATED = "Simulated"
-
-
-class SimulationResult(BaseModel):
-    is_simulated: bool = False
-    action_id: str
-    action_title: str
-    original_monthly_cost: float
-    projected_monthly_cost: float
-    monthly_savings_delta: float
-    annual_savings_delta: float
-    simulated_resource_state: str
-    simulation_timestamp: str
-    assumptions_applied: List[str] = Field(default_factory=list)
-    remaining_risks: List[str] = Field(default_factory=list)
-    disclaimer: str = (
-        "Hypothetical simulation only. No live AWS resources were stopped, deleted, or altered. "
-        "Projected savings are illustrative and not verified realized savings."
-    )
-
-
-class ChangePassport(BaseModel):
-    passport_id: str
-    scenario_id: str
-    scenario_name: str
-    recommendation_id: str
+    rule_name: str
     resource_id: str
-    resource_name: Optional[str] = None
+    resource_name: str = ""
     resource_type: str
-    region: str
     title: str
-    summary: str
-    rationale: str
-    decision_status: DecisionStatus
-    decision_status_explanation: str
-    financial_impact: FinancialImpact
-    evidence: List[EvidenceItem] = Field(default_factory=list)
-    data_limitations: List[str] = Field(default_factory=list)
-    departmental_reviews: Dict[str, DepartmentReview] = Field(default_factory=dict)
-    validation_checklist: List[ValidationCheckItem] = Field(default_factory=list)
-    rollback_recovery_plan: str
-    proposed_actions: List[ProposedAction] = Field(default_factory=list)
-    selected_action_id: str
-    simulation_result: Optional[SimulationResult] = None
+    summary: str                       # one plain-English sentence
+    monthly_savings: Optional[float]   # None = we cannot estimate honestly
+    priority: Literal["High", "Medium", "Low"]
+    confidence: Literal["High", "Medium", "Low"]
+    confidence_reason: str
+    risk: Literal["Low", "Medium", "High"]
+    risk_reason: str
+    evidence: list[Evidence]
+    calculation: list[CalcStep]
+    prices_used: list[PriceRef]
+    check_commands: list[str]          # read-only commands to confirm
+    fix_steps: list[str]
+    backtest: Optional[dict] = None
+    # "blocked" = the rule fired, but replaying history showed the advice
+    # would have hurt. Shown separately, never counted as savings.
+    status: Literal["active", "blocked"] = "active"
+    blocked_reason: Optional[str] = None
 
 
-class SimulateRequest(BaseModel):
-    scenario_id: str
-    recommendation_id: str
-    action_id: str
-
-
-class UndoSimulateRequest(BaseModel):
-    scenario_id: str
-    recommendation_id: str
+class Notice(BaseModel):
+    level: Literal["info", "warning"]
+    resource_id: Optional[str] = None
+    text: str

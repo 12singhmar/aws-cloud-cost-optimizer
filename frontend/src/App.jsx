@@ -1,296 +1,164 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { dashboardData as fallbackMockData } from './data/mockData';
-import { fetchHealth, fetchScenarios, fetchDashboard, fetchChangePassport } from './services/api';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
-import SummaryCards from './components/SummaryCards';
-import CostTrend from './components/CostTrend';
-import ServiceSpend from './components/ServiceSpend';
-import PriorityFindings from './components/PriorityFindings';
-import RecentActivity from './components/RecentActivity';
-import RecommendationDrawer from './components/RecommendationDrawer';
-import ChangePassportModal from './components/ChangePassportModal';
-import FutureSectionNotice from './components/FutureSectionNotice';
-import './App.css';
+import { useEffect, useState } from 'react'
+import { api, date, usd } from './api.js'
+import Backtest from './pages/Backtest.jsx'
+import BillCheck from './pages/BillCheck.jsx'
+import Findings from './pages/Findings.jsx'
+import Fleet from './pages/Fleet.jsx'
+import Lab from './pages/Lab.jsx'
+import Method from './pages/Method.jsx'
+import Overview from './pages/Overview.jsx'
 
-/**
- * AWS Cloud Cost Optimiser - Main Application
- * 
- * Cost Optimisation Command Center Dashboard.
- * Analyses cloud spend, highlights prioritised opportunities with explainable evidence,
- * cross-functional Change Passports, What-If simulation, and complete dark/light theme support.
- */
-function App() {
-  // Theme state: dark | light, with localStorage persistence & system preference fallback
-  const [theme, setTheme] = useState(() => {
-    try {
-      const saved = localStorage.getItem('theme');
-      if (saved === 'dark' || saved === 'light') return saved;
-      return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    } catch {
-      return 'light';
-    }
-  });
+const PAGES = [
+  { id: 'overview', label: 'Overview', group: 'Account' },
+  { id: 'findings', label: 'Findings', group: 'Account' },
+  { id: 'backtest', label: 'Backtest', group: 'Proof' },
+  { id: 'lab', label: 'Waste Lab', group: 'Proof' },
+  { id: 'bill', label: 'Bill Check', group: 'Proof' },
+  { id: 'fleet', label: 'Fleet Study', group: 'Research' },
+  { id: 'method', label: 'How it works', group: 'Research' },
+]
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    try {
-      localStorage.setItem('theme', theme);
-    } catch {
-      // Fallback if storage blocked
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
-
-  // Backend health status tracking
-  const [backendStatus, setBackendStatus] = useState('checking');
-
-  // Scenarios state
-  const [scenarios, setScenarios] = useState([
-    { id: 'high-cost-waste', name: 'High Cost & Resource Waste' },
-    { id: 'healthy-environment', name: 'Healthy Cloud Environment' },
-    { id: 'mixed-environment', name: 'Mixed Environment' },
-    { id: 'insufficient-data', name: 'Insufficient Data' },
-  ]);
-  const [selectedScenario, setSelectedScenario] = useState('high-cost-waste');
-
-  // Dashboard data and network states
-  const [dashboard, setDashboard] = useState(fallbackMockData);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  // UI navigation & drawer states
-  const [activeNav, setActiveNav] = useState('overview');
-  const [selectedFinding, setSelectedFinding] = useState(null);
-  const [futureSectionName, setFutureSectionName] = useState(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Change Passport modal states
-  const [passportModalOpen, setPassportModalOpen] = useState(false);
-  const [passportData, setPassportData] = useState(null);
-
-  // Load scenarios list and initial scenario data
-  const loadScenarioData = useCallback(async (scenarioId) => {
-    setIsLoading(true);
-    setErrorMessage(null);
-
-    try {
-      const data = await fetchDashboard(scenarioId);
-      setDashboard(data);
-      setSelectedScenario(scenarioId);
-      setBackendStatus('ok');
-    } catch (err) {
-      console.warn('Dashboard fetch failed:', err.message);
-      setBackendStatus('error');
-      setErrorMessage(`Failed to load scenario '${scenarioId}': ${err.message}. Showing previous active data.`);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  // Initial mount: check health, load scenarios list, load default scenario
-  useEffect(() => {
-    let isMounted = true;
-
-    async function init() {
-      try {
-        await fetchHealth();
-        if (isMounted) setBackendStatus('ok');
-
-        const availableScenarios = await fetchScenarios();
-        if (isMounted && availableScenarios?.length > 0) {
-          setScenarios(availableScenarios);
-        }
-
-        if (isMounted) {
-          await loadScenarioData(selectedScenario);
-        }
-      } catch (err) {
-        if (isMounted) {
-          console.warn('Backend unavailable on mount:', err.message);
-          setBackendStatus('error');
-        }
-      }
-    }
-
-    init();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [loadScenarioData, selectedScenario]);
-
-  // Handle scenario switch from header
-  const handleSelectScenario = (newScenarioId) => {
-    if (newScenarioId === selectedScenario && !errorMessage) return;
-    setSelectedFinding(null); // Close any open finding drawer
-    setPassportModalOpen(false); // Close passport modal if open
-    loadScenarioData(newScenarioId);
-  };
-
-  // Handle opening the Change Passport for a finding
-  const handleOpenPassport = async (finding) => {
-    if (!finding) return;
-    try {
-      const passport = await fetchChangePassport(finding.id, selectedScenario);
-      setPassportData(passport);
-      setPassportModalOpen(true);
-    } catch (err) {
-      console.error('Failed to load Change Passport:', err);
-    }
-  };
-
-  // Handle sidebar navigation selection
-  const handleSelectNav = (navId, isAvailable) => {
-    if (isAvailable) {
-      setActiveNav(navId);
-      setFutureSectionName(null);
-    } else {
-      const labels = {
-        recommendations: 'Full Recommendations Catalogue',
-        resources: 'AWS Resources Inventory',
-        activity: 'Historical Activity Logs',
-        settings: 'Platform Settings & Thresholds',
-      };
-      setFutureSectionName(labels[navId] || 'This section');
-    }
-  };
-
-  return (
-    <div className="app-layout">
-      {/* Sidebar Navigation */}
-      <Sidebar
-        activeNav={activeNav}
-        onSelectNav={handleSelectNav}
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
-      />
-
-      {/* Main Content Area */}
-      <div className="main-wrapper">
-        {/* Top Header with Scenario Selector, Simulation Badge, & Theme Toggle */}
-        <Header
-          month={dashboard.metadata.month}
-          statusText={dashboard.metadata.statusText}
-          backendStatus={backendStatus}
-          scenarios={scenarios}
-          selectedScenario={selectedScenario}
-          onSelectScenario={handleSelectScenario}
-          isLoading={isLoading}
-          onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          theme={theme}
-          onToggleTheme={toggleTheme}
-        />
-
-        {/* Dashboard Command Center */}
-        <main className="dashboard-content">
-          {/* Error Banner with Retry (if any) */}
-          {errorMessage && (
-            <div className="dashboard-notice-banner error-banner" role="alert">
-              <div className="notice-icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-              </div>
-              <div className="notice-body">
-                <span className="notice-text">{errorMessage}</span>
-              </div>
-              <button
-                type="button"
-                className="notice-retry-btn"
-                onClick={() => loadScenarioData(selectedScenario)}
-              >
-                Retry
-              </button>
-            </div>
-          )}
-
-          {/* Data Limitations Notice (for Insufficient Data scenario) */}
-          {dashboard.metadata.dataLimitationsActive && (
-            <div className="dashboard-notice-banner limitation-banner" role="status">
-              <div className="notice-icon limitation-icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                  <line x1="12" y1="9" x2="12" y2="13" />
-                  <line x1="12" y1="17" x2="12.01" y2="17" />
-                </svg>
-              </div>
-              <div className="notice-body">
-                <h4 className="notice-title">Observability Gaps & Data Limitations Active</h4>
-                <p className="notice-text">
-                  {dashboard.metadata.dataLimitationsNotice || 
-                    "Sufficient observation windows or CloudWatch metrics are unavailable for some resources. Preconditions require verified data before generating recommendations."}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Executive Summary KPI Cards */}
-          <SummaryCards summary={dashboard.summary} />
-
-          {/* Primary Dashboard Grid */}
-          <div className={`dashboard-grid ${isLoading ? 'dashboard-grid-loading' : ''}`}>
-            {/* Left Column: Priority Findings & Service Spend */}
-            <div className="grid-column">
-              {/* Priority Findings - Core Value of Product */}
-              <PriorityFindings
-                findings={dashboard.priorityFindings}
-                onSelectFinding={(finding) => setSelectedFinding(finding)}
-                selectedFindingId={selectedFinding?.id}
-              />
-
-              {/* Service Spend Breakdown */}
-              <ServiceSpend serviceSpend={dashboard.serviceSpend} />
-            </div>
-
-            {/* Right Column: Cost Trend & Recent Activity */}
-            <div className="grid-column">
-              {/* 6-Month Cost Trend Chart */}
-              <CostTrend costTrend={dashboard.costTrend} />
-
-              {/* Recent Scan & Analysis Activity */}
-              <RecentActivity
-                activities={dashboard.recentActivity}
-                lastAnalysis={dashboard.metadata.lastAnalysis}
-                statusText={dashboard.metadata.statusText}
-              />
-            </div>
-          </div>
-        </main>
-      </div>
-
-      {/* Slide-out Recommendation Detail Drawer */}
-      <RecommendationDrawer
-        finding={selectedFinding}
-        isOpen={Boolean(selectedFinding)}
-        onClose={() => setSelectedFinding(null)}
-        onOpenPassport={handleOpenPassport}
-      />
-
-      {/* Change Passport Workspace Modal */}
-      {passportModalOpen && passportData && (
-        <ChangePassportModal
-          key={passportData.passport_id}
-          passport={passportData}
-          isOpen={passportModalOpen}
-          onClose={() => setPassportModalOpen(false)}
-          scenarioId={selectedScenario}
-          onSimulationUpdated={() => loadScenarioData(selectedScenario)}
-        />
-      )}
-
-      {/* Future Section Notice Toast */}
-      <FutureSectionNotice
-        sectionName={futureSectionName}
-        onClose={() => setFutureSectionName(null)}
-      />
-    </div>
-  );
+const pageFromHash = () => {
+  const id = window.location.hash.replace('#/', '')
+  return PAGES.some((p) => p.id === id) ? id : 'overview'
 }
 
-export default App;
+function readTheme() {
+  try { return localStorage.getItem('theme') } catch { return null }
+}
+
+export default function App() {
+  const [page, setPage] = useState(pageFromHash)
+  const [snapshots, setSnapshots] = useState([])
+  const [snapId, setSnapId] = useState(null)
+  const [data, setData] = useState(null)        // { analysis, lab, bill }
+  const [shared, setShared] = useState({})      // fleet, rules, prices (not per snapshot)
+  const [selected, setSelected] = useState(null)
+  const [error, setError] = useState(null)
+  const [theme, setTheme] = useState(readTheme)
+
+  useEffect(() => {
+    const onHash = () => setPage(pageFromHash())
+    window.addEventListener('popstate', onHash)
+    window.addEventListener('hashchange', onHash)
+    return () => {
+      window.removeEventListener('popstate', onHash)
+      window.removeEventListener('hashchange', onHash)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (theme) document.documentElement.dataset.theme = theme
+    else delete document.documentElement.dataset.theme
+    try { theme ? localStorage.setItem('theme', theme) : localStorage.removeItem('theme') } catch { /* private mode */ }
+  }, [theme])
+
+  useEffect(() => {
+    Promise.all([api.snapshots(), api.fleet(), api.rules()])
+      .then(([snaps, fleet, rules]) => {
+        setSnapshots(snaps)
+        setShared((s) => ({ ...s, fleet, rules }))
+        setSnapId(snaps[0]?.id ?? null)
+      })
+      .catch((e) => setError(e.message))
+  }, [])
+
+  useEffect(() => {
+    if (!snapId) return
+    let live = true
+    Promise.all([api.analysis(snapId), api.lab(snapId), api.bill(snapId)])
+      .then(([analysis, lab, bill]) => {
+        if (!live) return
+        setData({ analysis, lab, bill })
+        setSelected(null)
+        api.prices(analysis.snapshot.region).then((prices) => live && setShared((s) => ({ ...s, prices })))
+      })
+      .catch((e) => live && setError(e.message))
+    return () => { live = false }
+  }, [snapId])
+
+  const go = (id, findingId) => {
+    if (findingId) setSelected(findingId)
+    window.history.pushState(null, '', `#/${id}`)   // keeps Back button working
+    setPage(id)
+    window.scrollTo(0, 0)
+  }
+
+  const snap = snapshots.find((s) => s.id === snapId)
+  const isDark = theme === 'dark' || (!theme && window.matchMedia?.('(prefers-color-scheme: dark)').matches)
+  const counts = data && {
+    findings: data.analysis.summary.findings,
+    backtest: data.analysis.backtests.length || null,
+  }
+
+  let body
+  if (error) {
+    body = (
+      <div className="error-box">
+        <b>Cannot reach the backend.</b> {error}
+        <p className="small" style={{ marginTop: 6 }}>Start it with: <span className="mono">cd backend &amp;&amp; uvicorn app.main:app --reload</span></p>
+      </div>
+    )
+  } else if (!data) {
+    body = <div className="loading">Loading analysis…</div>
+  } else {
+    const props = { ...data, ...shared, go }
+    body = {
+      overview: <Overview {...props} />,
+      findings: <Findings {...props} selected={selected} onSelect={setSelected} />,
+      backtest: <Backtest {...props} />,
+      lab: <Lab {...props} />,
+      bill: <BillCheck {...props} />,
+      fleet: <Fleet {...props} />,
+      method: <Method rules={shared.rules || []} prices={shared.prices} />,
+    }[page]
+  }
+
+  return (
+    <div className="shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <div className="brand-mark" aria-hidden="true">$</div>
+          <div>
+            <div className="brand-name">Cloud Cost Optimizer</div>
+            <div className="brand-sub">recommendations you can check</div>
+          </div>
+        </div>
+        <nav className="nav" aria-label="Pages">
+          {PAGES.map((p, k) => {
+            const header = k === 0 || PAGES[k - 1].group !== p.group
+              ? <div className="nav-group" key={p.group}>{p.group}</div> : null
+            return [header, (
+              <button key={p.id} aria-current={page === p.id ? 'page' : undefined} onClick={() => go(p.id)}>
+                {p.label}
+                {counts?.[p.id] ? <span className="count">{counts[p.id]}</span> : null}
+              </button>
+            )]
+          })}
+        </nav>
+        <div className="sidebar-foot">Read-only · never changes your AWS account</div>
+      </aside>
+
+      <div className="main">
+        <div className="topbar">
+          <label className="small muted" htmlFor="snap">Snapshot</label>
+          <select id="snap" value={snapId ?? ''} onChange={(e) => setSnapId(e.target.value)}>
+            {snapshots.map((s) => (
+              <option key={s.id} value={s.id}>{s.source === 'demo' ? 'Demo account (synthetic)' : `${s.account} · ${s.id}`}</option>
+            ))}
+          </select>
+          {snap && (snap.source === 'demo'
+            ? <span className="badge demo">● Demo data</span>
+            : <span className="badge real">● Real AWS account</span>)}
+          {snap && <span className="small muted">{snap.region} · collected {date(snap.collected_at)}</span>}
+          <span className="spacer" />
+          {data && <span className="small muted">Savings found: <b style={{ color: 'var(--text)' }}>{usd(data.analysis.summary.potential_savings)}/mo</b></span>}
+          <button className="btn" onClick={() => setTheme(isDark ? 'light' : 'dark')} aria-label="Toggle dark mode">
+            {isDark ? '☀ Light' : '☾ Dark'}
+          </button>
+        </div>
+        <main className="content">{body}</main>
+      </div>
+    </div>
+  )
+}
