@@ -1,223 +1,177 @@
-"""The five waste rules and the cost formulas they use.
+"""Waste rules. Each rule looks at the scan and returns findings: things that cost money for nothing.
 
-1. Unattached EBS volume      - a disk not connected to any server
-2. Unused Elastic IP          - a reserved public IP attached to nothing
-3. Stopped instance           - no compute charge, but its disks are still billed
-4. Orphaned snapshot          - a backup whose original disk was deleted
-5. Idle instance              - running for 7+ days with almost no CPU or network
+ 1. Unattached disk          a disk not connected to any server
+ 2. Unused Elastic IP        a public IP not attached to anything
+ 3. Stopped server           off, but its disks are still billed
+ 4. Old snapshot             a backup whose original disk was deleted
+ 5. Idle NAT gateway         sent no data in 7 days
+ 6. Empty load balancer      no servers behind it
+ 7. Idle server              CPU under 3% for 7 days
+ 8. Oversized server         CPU never busy for 7 days, a smaller size would do
 """
-
-from __future__ import annotations
 
 import math
 
-from app.models import Finding, Instance, Scan, Volume
-from app.prices import HOURS_PER_MONTH, Prices
+from app.costs import disk_cost, monthly_cost
+from app.models import Finding
+from app.prices import HOURS_PER_MONTH, load_prices
 
-# Idle instance thresholds
-MIN_HOURS_OF_DATA = 7 * 24      # one full week, so weekends are included
-IDLE_CPU_P95 = 3.0              # 95% of hours below 3% CPU
-IDLE_NETWORK_KBPS = 5.0         # average inbound traffic below 5 KB/s
-
-GP3_FREE_IOPS = 3000            # gp3 includes 3,000 IOPS and 125 MiB/s for free
-GP3_FREE_MBPS = 125
+MIN_HOURS = 7 * 24          # the CPU rules need one full week of data
+IDLE_CPU = 3.0              # idle: 95% of hours under 3% CPU
+OVERSIZED_CPU = 35.0        # oversized: 95% of hourly peaks under 35% CPU
+SIZES = ["nano", "micro", "small", "medium", "large", "xlarge", "2xlarge", "4xlarge", "8xlarge"]
 
 
-# ---------- cost formulas ----------
-
-def volume_cost(v: Volume, p: Prices) -> tuple[float, list[str], list[str]]:
-    key = f"ebs_{v.type}_gb_month"
-    if key not in p.other:
-        return 0.0, [f"No price for volume type {v.type}"], []
-    cost = v.size_gb * p.get(key)
-    calc = [f"{v.size_gb} GB x ${p.get(key)} per GB-month = ${cost:.2f}"]
-    skus = [p.sku(key)]
-    if v.type == "gp3":
-        extra_iops = max(0, (v.iops or 0) - GP3_FREE_IOPS)
-        extra_mbps = max(0, (v.throughput or 0) - GP3_FREE_MBPS)
-        if extra_iops:
-            c = extra_iops * p.get("ebs_gp3_iops_month")
-            calc.append(f"{extra_iops} extra IOPS x ${p.get('ebs_gp3_iops_month')} = ${c:.2f}")
-            skus.append(p.sku("ebs_gp3_iops_month"))
-            cost += c
-        if extra_mbps:
-            c = extra_mbps * p.get("ebs_gp3_mbps_month")
-            calc.append(f"{extra_mbps} extra MiB/s x ${p.get('ebs_gp3_mbps_month')} = ${c:.2f}")
-            skus.append(p.sku("ebs_gp3_mbps_month"))
-            cost += c
-    return cost, calc, skus
-
-
-def instance_cost(i: Instance, p: Prices) -> float:
-    if i.state != "running" or not p.has_instance(i.type):
-        return 0.0
-    return p.instance_hourly(i.type) * HOURS_PER_MONTH
-
-
-def ip_cost(p: Prices) -> float:
-    return p.get("public_ipv4_idle_hour") * HOURS_PER_MONTH
-
-
-def p95(values: list[float]) -> float:
+def p95(values):
+    """95th percentile: the value that 95% of the numbers are below."""
     ordered = sorted(values)
-    return ordered[max(0, math.ceil(0.95 * len(ordered)) - 1)] if ordered else 0.0
+    return ordered[max(0, math.ceil(0.95 * len(ordered)) - 1)]
 
 
-def days_ago(scan: Scan, when) -> int:
-    return (scan.scanned_at - when).days
+def days_ago(scan, when):
+    return (scan.scanned_at - when).days if when else None
 
 
-# ---------- rules ----------
-
-def unattached_volumes(scan: Scan, p: Prices) -> list[Finding]:
-    out = []
-    for v in scan.volumes:
-        if v.state != "available":
-            continue
-        cost, calc, skus = volume_cost(v, p)
-        out.append(Finding(
-            rule="Unattached EBS volume", resource_id=v.id, resource_type="EBS volume",
-            title=f"Unattached disk {v.name or v.id} ({v.size_gb} GB {v.type})",
-            why="This disk is not connected to any server but is billed every month.",
-            monthly_cost=round(cost, 2),
-            evidence={"State": v.state, "Size": f"{v.size_gb} GB {v.type}",
-                      "Created": f"{days_ago(scan, v.created)} days ago"},
-            calculation=calc, prices_used=skus,
-            fix=[f"aws ec2 create-snapshot --volume-id {v.id} --description \"backup before delete\"",
-                 f"aws ec2 delete-volume --volume-id {v.id}"]))
-    return out
+def one_size_smaller(itype, p):
+    family, _, size = itype.partition(".")
+    if size not in SIZES or SIZES.index(size) == 0:
+        return None
+    smaller = f"{family}.{SIZES[SIZES.index(size) - 1]}"
+    return smaller if p.instance_hourly(smaller) else None
 
 
-def unused_elastic_ips(scan: Scan, p: Prices) -> list[Finding]:
-    out = []
-    for ip in scan.elastic_ips:
-        if ip.attached_to:
-            continue
-        cost = ip_cost(p)
-        out.append(Finding(
-            rule="Unused Elastic IP", resource_id=ip.allocation_id, resource_type="Elastic IP",
-            title=f"Unused Elastic IP {ip.public_ip}",
-            why="AWS charges for every public IPv4 address, even when it is not attached to anything.",
-            monthly_cost=round(cost, 2),
-            evidence={"IP address": ip.public_ip, "Attached to": "nothing"},
-            calculation=[f"${p.get('public_ipv4_idle_hour')} per hour x {HOURS_PER_MONTH} hours = ${cost:.2f}"],
-            prices_used=[p.sku("public_ipv4_idle_hour")],
-            fix=[f"aws ec2 release-address --allocation-id {ip.allocation_id}"]))
-    return out
+def find_waste(scan):
+    findings, notes = [], []
+    by_id = {r.id: r for r in scan.resources}
+    eips = {r.info["public_ip"] for r in scan.resources if r.kind == "elastic_ip"}
 
+    def add(rule, r, title, why, evidence, fix_action=None, fix_label="", fix_warning="", cost=None, calc=None):
+        if cost is None:
+            cost, calc = monthly_cost(r, load_prices(r.region), eips)
+        findings.append(Finding(rule=rule, kind=r.kind, region=r.region, resource_id=r.id, title=title,
+                                why=why, monthly_cost=round(cost, 2), evidence=evidence, calculation=calc,
+                                fix_action=fix_action, fix_label=fix_label, fix_warning=fix_warning))
 
-def stopped_instances(scan: Scan, p: Prices) -> list[Finding]:
-    out = []
-    volumes = {v.id: v for v in scan.volumes}
-    for i in scan.instances:
-        if i.state != "stopped":
-            continue
-        cost, calc, skus = 0.0, [], []
-        for vid in i.volume_ids:
-            if vid in volumes:
-                c, lines, s = volume_cost(volumes[vid], p)
+    for r in scan.resources:
+        i = r.info
+        if r.kind == "volume" and r.state == "available":
+            add("Unattached disk", r, f"Spare disk {r.name or r.id} ({i['size_gb']} GB)",
+                "This disk is not connected to any server but is billed every month.",
+                {"Size": f"{i['size_gb']} GB {i['type']}", "Created": f"{days_ago(scan, r.created)} days ago"},
+                "delete_volume", "Back up and delete",
+                "A snapshot is taken first, then the disk is deleted.")
+
+        elif r.kind == "elastic_ip" and not i["attached_to"]:
+            add("Unused Elastic IP", r, f"Unused IP address {i['public_ip']}",
+                "AWS charges for every public IPv4 address, even when it is not used.",
+                {"IP address": i["public_ip"], "Attached to": "nothing"},
+                "release_ip", "Release IP", "The address goes back to AWS and cannot be recovered.")
+
+        elif r.kind == "instance" and r.state == "stopped":
+            disks = [by_id[v] for v in i["volume_ids"] if v in by_id]
+            p = load_prices(r.region)
+            cost, calc = 0.0, []
+            for d in disks:
+                c, lines = disk_cost(d.info["size_gb"], d.info["type"], d.info.get("iops"),
+                                     d.info.get("throughput"), p)
                 cost += c
-                calc += [f"{vid}: {line}" for line in lines]
-                skus += s
-        if cost == 0:
-            continue
-        since = f"{days_ago(scan, i.stopped_since)} days" if i.stopped_since else "unknown"
-        out.append(Finding(
-            rule="Stopped instance", resource_id=i.id, resource_type="EC2 instance",
-            title=f"Stopped server {i.name or i.id} still paying for its disks",
-            why="A stopped server has no compute charge, but its disks keep costing money.",
-            monthly_cost=round(cost, 2),
-            evidence={"State": "stopped", "Stopped for": since, "Disks": ", ".join(i.volume_ids)},
-            calculation=calc, prices_used=skus,
-            fix=[f"aws ec2 create-image --instance-id {i.id} --name backup-{i.id}",
-                 f"aws ec2 terminate-instances --instance-ids {i.id}"]))
-    return out
+                calc += [f"{d.id}: {line}" for line in lines]
+            if cost > 0:
+                add("Stopped server", r, f"Stopped server {r.name or r.id} still paying for its disks",
+                    "A stopped server costs nothing itself, but its disks are still billed.",
+                    {"Type": i["type"], "Stopped since": i.get("stopped_since") or "unknown",
+                     "Disks": ", ".join(i["volume_ids"])},
+                    "terminate", "Delete server",
+                    "The server and its disks are deleted. This cannot be undone.", cost, calc)
 
+        elif r.kind == "snapshot" and not i["volume_exists"] and not i["used_by_ami"]:
+            ours = i.get("made_by_us")
+            add("Old snapshot", r,
+                f"Backup we made before deleting {i['volume_id']}" if ours else f"Backup {r.id} of a deleted disk",
+                "This app took this backup before deleting the disk. Keep it until you are sure, then delete it."
+                if ours else "The disk this backup came from no longer exists. Delete it if you don't need it.",
+                {"Original disk": f"{i['volume_id']} (deleted)", "Size": f"{i['size_gb']} GB",
+                 "Created": f"{days_ago(scan, r.created)} days ago"},
+                "delete_snapshot", "Delete backup", "The backup is deleted. This cannot be undone.")
 
-def orphaned_snapshots(scan: Scan, p: Prices) -> list[Finding]:
-    out = []
-    price = p.get("ebs_snapshot_gb_month")
-    for s in scan.snapshots:
-        if s.volume_exists or s.used_by_ami:
-            continue
-        cost = s.size_gb * price
-        out.append(Finding(
-            rule="Orphaned snapshot", resource_id=s.id, resource_type="EBS snapshot",
-            title=f"Snapshot {s.id} of a deleted disk",
-            why="The disk this backup came from no longer exists. Check if the backup is still needed.",
-            monthly_cost=round(cost, 2),
-            evidence={"Original disk": f"{s.volume_id} (deleted)", "Size": f"{s.size_gb} GB",
-                      "Created": f"{days_ago(scan, s.created)} days ago"},
-            calculation=[f"up to {s.size_gb} GB x ${price} per GB-month = ${cost:.2f} "
-                         "(AWS bills only the data actually stored, so the real cost may be lower)"],
-            prices_used=[p.sku("ebs_snapshot_gb_month")],
-            fix=[f"aws ec2 delete-snapshot --snapshot-id {s.id}"]))
-    return out
+        elif r.kind == "nat_gateway" and i["bytes_sent_7d"] == 0:
+            add("Idle NAT gateway", r, f"NAT gateway {r.name or r.id} sent no data in 7 days",
+                "NAT gateways cost money every hour, even when nothing uses them.",
+                {"Data sent (7 days)": "0 bytes", "Created": f"{days_ago(scan, r.created)} days ago"},
+                "delete_nat", "Delete NAT gateway",
+                "Servers in private subnets lose internet access. Its IP stays and can be released after.")
 
+        elif r.kind == "load_balancer" and i["targets"] == 0:
+            add("Empty load balancer", r, f"Load balancer {r.name} has no servers behind it",
+                "A load balancer costs money every hour even with nothing to send traffic to.",
+                {"Type": i["lb_type"], "Servers behind it": "0"},
+                "delete_lb", "Delete load balancer", "The load balancer is deleted.")
 
-def idle_instances(scan: Scan, p: Prices, notes: list[str]) -> list[Finding]:
-    out = []
-    for i in scan.instances:
-        if i.state != "running":
-            continue
-        m = scan.metrics.get(i.id)
-        cpu = [x for x in (m.cpu if m else []) if x is not None]
-        net = [x for x in (m.network_in if m else []) if x is not None]
-        if len(cpu) < MIN_HOURS_OF_DATA:
-            notes.append(f"{i.name or i.id}: only {len(cpu)} hours of CPU data, need "
-                         f"{MIN_HOURS_OF_DATA} (7 days) before we can say it is idle.")
-            continue
-        cpu_p95 = p95(cpu)
-        if cpu_p95 >= IDLE_CPU_P95:
-            continue
-        if net:
-            net_kbps = (sum(net) / len(net)) / 3600 / 1024
-            if net_kbps >= IDLE_NETWORK_KBPS:
+        elif r.kind == "instance" and r.state == "running":
+            m = scan.metrics.get(r.id)
+            avg = [x for x in (m.cpu_avg if m else []) if x is not None]
+            peaks = [x for x in (m.cpu_max if m else []) if x is not None]
+            if len(avg) < MIN_HOURS:
+                notes.append(f"{r.name or r.id} ({r.region}): {len(avg)} hours of CPU data so far. "
+                             f"Idle and oversized checks need {MIN_HOURS} hours (7 days).")
                 continue
-            net_text = f"{net_kbps:.2f} KB/s"
-        else:
-            net_text = "not recorded in this data (judged on CPU only)"
-        if not p.has_instance(i.type):
-            notes.append(f"{i.name or i.id}: no price for {i.type} in {p.region}.")
-            continue
-        cost = instance_cost(i, p)
-        out.append(Finding(
-            rule="Idle instance", resource_id=i.id, resource_type="EC2 instance",
-            title=f"Idle server {i.name or i.id} ({i.type})",
-            why=f"Over {len(cpu) // 24} days, CPU stayed below {IDLE_CPU_P95}% in 95% of hours"
-                + (" and there was almost no network traffic." if net else "."),
-            monthly_cost=round(cost, 2),
-            evidence={"CPU (95th percentile)": f"{cpu_p95:.2f}%",
-                      "Average network in": net_text,
-                      "Hours of data": str(len(cpu))},
-            calculation=[f"{i.type}: ${p.instance_hourly(i.type)} per hour x {HOURS_PER_MONTH} hours = ${cost:.2f}"],
-            prices_used=[p.instance_sku(i.type)],
-            fix=[f"aws ec2 stop-instances --instance-ids {i.id}"]))
-    return out
+            if p95(avg) < IDLE_CPU:
+                add("Idle server", r, f"Idle server {r.name or r.id} ({i['type']})",
+                    f"CPU stayed under {IDLE_CPU:g}% in 95% of the last {len(avg)} hours.",
+                    {"CPU (95% of hours under)": f"{p95(avg):.1f}%", "Hours checked": str(len(avg))},
+                    "stop", "Stop server", "The server stops. Its disks are kept and it can be started again.")
+            elif peaks and p95(peaks) < OVERSIZED_CPU:
+                p = load_prices(r.region)
+                smaller = one_size_smaller(i["type"], p)
+                if smaller:
+                    now, after = p.instance_hourly(i["type"]), p.instance_hourly(smaller)
+                    saving = (now - after) * HOURS_PER_MONTH
+                    add("Oversized server", r, f"{r.name or r.id}: {i['type']} could be {smaller}",
+                        f"Even at its busiest, CPU stayed under {OVERSIZED_CPU:g}%. Half the size would still cope.",
+                        {"Busiest hours CPU": f"{p95(peaks):.1f}%", "Hours checked": str(len(peaks))},
+                        cost=saving, calc=[f"{i['type']} ${now}/h - {smaller} ${after}/h = "
+                                           f"${now - after:.4f}/h x {HOURS_PER_MONTH} h = ${saving:.2f}"],
+                        fix_label="Change type in the AWS console (needs a restart)")
 
-
-# ---------- report ----------
-
-def build_report(scan: Scan, p: Prices) -> dict:
-    notes: list[str] = []
-    findings = (unattached_volumes(scan, p) + unused_elastic_ips(scan, p) + stopped_instances(scan, p)
-                + orphaned_snapshots(scan, p) + idle_instances(scan, p, notes))
     findings.sort(key=lambda f: -f.monthly_cost)
+    return findings, notes
 
-    # what everything we scanned costs per month (list price, before free-tier credits)
-    total = sum(instance_cost(i, p) for i in scan.instances)
-    total += sum(volume_cost(v, p)[0] for v in scan.volumes)
-    total += sum(s.size_gb * p.get("ebs_snapshot_gb_month") for s in scan.snapshots)
-    total += len(scan.elastic_ips) * ip_cost(p)
 
+def report(scan):
+    """Everything the account page shows for one scan."""
+    eips = {r.info["public_ip"] for r in scan.resources if r.kind == "elastic_ip"}
+    inventory, total = [], 0.0
+    for r in scan.resources:
+        cost, calc = monthly_cost(r, load_prices(r.region), eips)
+        total += cost
+        inventory.append({"kind": r.kind, "region": r.region, "id": r.id, "name": r.name,
+                          "state": r.state, "monthly_cost": round(cost, 2), "calculation": calc,
+                          "detail": describe(r)})
+    inventory.sort(key=lambda x: -x["monthly_cost"])
+    findings, notes = find_waste(scan)
+    by_region = {}
+    for item in inventory:
+        by_region[item["region"]] = by_region.get(item["region"], 0) + item["monthly_cost"]
     return {
-        "scan": scan.model_dump(mode="json", include={"id", "source", "account", "region", "scanned_at",
-                                                      "description"}),
-        "counts": {"instances": len(scan.instances), "volumes": len(scan.volumes),
-                   "elastic_ips": len(scan.elastic_ips), "snapshots": len(scan.snapshots)},
-        "monthly_cost": round(total, 2),
+        "scan": {"id": scan.id, "account": scan.account, "fake_aws": scan.fake_aws,
+                 "scanned_at": scan.scanned_at, "regions": len(scan.regions), "errors": scan.errors},
+        "monthly_total": round(total, 2),
         "monthly_waste": round(sum(f.monthly_cost for f in findings), 2),
+        "by_region": {k: round(v, 2) for k, v in sorted(by_region.items(), key=lambda kv: -kv[1])},
+        "inventory": inventory,
         "findings": [f.model_dump() for f in findings],
         "notes": notes,
-        "price_list_version": p.version,
+        "buckets_without_lifecycle": scan.buckets_without_lifecycle,
     }
+
+
+def describe(r):
+    i = r.info
+    return {
+        "instance": lambda: f"{i['type']}, {r.state}",
+        "volume": lambda: f"{i['size_gb']} GB {i['type']}, {'attached' if i['attached_to'] else 'not attached'}",
+        "elastic_ip": lambda: f"{i['public_ip']}, {'in use' if i['attached_to'] else 'not used'}",
+        "snapshot": lambda: f"{i['size_gb']} GB backup",
+        "nat_gateway": lambda: f"{i['bytes_sent_7d'] / 1e9:.2f} GB sent in 7 days",
+        "load_balancer": lambda: f"{i['lb_type']}, {i['targets']} servers behind it",
+    }.get(r.kind, lambda: "")()

@@ -1,0 +1,1165 @@
+{
+ "fetched_at": "2026-11-28T19:37:38+00:00",
+ "instances": {
+  "c5.12xlarge": {
+   "description": "$2.544 per On Demand Linux c5.12xlarge Instance Hour",
+   "memory_gib": 96.0,
+   "sku": "SAH3QX23HKZWRM89",
+   "usd_per_hour": 2.544,
+   "vcpu": 48
+  },
+  "c5.18xlarge": {
+   "description": "$3.816 per On Demand Linux c5.18xlarge Instance Hour",
+   "memory_gib": 144.0,
+   "sku": "BYPM4YE43QWDFJZX",
+   "usd_per_hour": 3.816,
+   "vcpu": 72
+  },
+  "c5.24xlarge": {
+   "description": "$5.088 per On Demand Linux c5.24xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "sku": "85885MGYVC63N4D2",
+   "usd_per_hour": 5.088,
+   "vcpu": 96
+  },
+  "c5.2xlarge": {
+   "description": "$0.424 per On Demand Linux c5.2xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "WV35NXKAWHETXNZ2",
+   "usd_per_hour": 0.424,
+   "vcpu": 8
+  },
+  "c5.4xlarge": {
+   "description": "$0.848 per On Demand Linux c5.4xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "9AMRUT5XMFV878DK",
+   "usd_per_hour": 0.848,
+   "vcpu": 16
+  },
+  "c5.9xlarge": {
+   "description": "$1.908 per On Demand Linux c5.9xlarge Instance Hour",
+   "memory_gib": 72.0,
+   "sku": "V8VDPH7296G3N253",
+   "usd_per_hour": 1.908,
+   "vcpu": 36
+  },
+  "c5.large": {
+   "description": "$0.106 per On Demand Linux c5.large Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "QUWUPBD4TYK6WWX8",
+   "usd_per_hour": 0.106,
+   "vcpu": 2
+  },
+  "c5.xlarge": {
+   "description": "$0.212 per On Demand Linux c5.xlarge Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "KWHQTN3VC9TZDMVK",
+   "usd_per_hour": 0.212,
+   "vcpu": 4
+  },
+  "c6g.12xlarge": {
+   "description": "$2.0352 per On Demand Linux c6g.12xlarge Instance Hour",
+   "memory_gib": 96.0,
+   "sku": "AJFRMHE3UB327RKE",
+   "usd_per_hour": 2.0352,
+   "vcpu": 48
+  },
+  "c6g.16xlarge": {
+   "description": "$2.7136 per On Demand Linux c6g.16xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "S363P8452YC7GZYH",
+   "usd_per_hour": 2.7136,
+   "vcpu": 64
+  },
+  "c6g.2xlarge": {
+   "description": "$0.3392 per On Demand Linux c6g.2xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "XXBSFN6SE6Q4XZAG",
+   "usd_per_hour": 0.3392,
+   "vcpu": 8
+  },
+  "c6g.4xlarge": {
+   "description": "$0.6784 per On Demand Linux c6g.4xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "6KT9XJ32JD68NYJW",
+   "usd_per_hour": 0.6784,
+   "vcpu": 16
+  },
+  "c6g.8xlarge": {
+   "description": "$1.3568 per On Demand Linux c6g.8xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "K6D6BUPWXV772XZW",
+   "usd_per_hour": 1.3568,
+   "vcpu": 32
+  },
+  "c6g.large": {
+   "description": "$0.0848 per On Demand Linux c6g.large Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "AK62K4PM63QWPT6C",
+   "usd_per_hour": 0.0848,
+   "vcpu": 2
+  },
+  "c6g.medium": {
+   "description": "$0.0424 per On Demand Linux c6g.medium Instance Hour",
+   "memory_gib": 2.0,
+   "sku": "4CBY6ZPAM2NBMHEQ",
+   "usd_per_hour": 0.0424,
+   "vcpu": 1
+  },
+  "c6g.xlarge": {
+   "description": "$0.1696 per On Demand Linux c6g.xlarge Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "DACEEMGVDS865NH8",
+   "usd_per_hour": 0.1696,
+   "vcpu": 4
+  },
+  "c6i.12xlarge": {
+   "description": "$2.544 per On Demand Linux c6i.12xlarge Instance Hour",
+   "memory_gib": 96.0,
+   "sku": "9NC4Q44M84J2VBXG",
+   "usd_per_hour": 2.544,
+   "vcpu": 48
+  },
+  "c6i.16xlarge": {
+   "description": "$3.392 per On Demand Linux c6i.16xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "252D25S3538B6E2P",
+   "usd_per_hour": 3.392,
+   "vcpu": 64
+  },
+  "c6i.24xlarge": {
+   "description": "$5.088 per On Demand Linux c6i.24xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "sku": "EHGJQYQ4GXERER5Z",
+   "usd_per_hour": 5.088,
+   "vcpu": 96
+  },
+  "c6i.2xlarge": {
+   "description": "$0.424 per On Demand Linux c6i.2xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "2BNU84263QZSV72B",
+   "usd_per_hour": 0.424,
+   "vcpu": 8
+  },
+  "c6i.32xlarge": {
+   "description": "$6.784 per On Demand Linux c6i.32xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "MKCKADHMJS3PJVV8",
+   "usd_per_hour": 6.784,
+   "vcpu": 128
+  },
+  "c6i.4xlarge": {
+   "description": "$0.848 per On Demand Linux c6i.4xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "E3J2QWCWSX823J9N",
+   "usd_per_hour": 0.848,
+   "vcpu": 16
+  },
+  "c6i.8xlarge": {
+   "description": "$1.696 per On Demand Linux c6i.8xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "P9N4KW2578E6MZN5",
+   "usd_per_hour": 1.696,
+   "vcpu": 32
+  },
+  "c6i.large": {
+   "description": "$0.106 per On Demand Linux c6i.large Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "B53FKJGQEWE3HS6U",
+   "usd_per_hour": 0.106,
+   "vcpu": 2
+  },
+  "c6i.xlarge": {
+   "description": "$0.212 per On Demand Linux c6i.xlarge Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "75XXUQHQZ2K6JBRS",
+   "usd_per_hour": 0.212,
+   "vcpu": 4
+  },
+  "c7g.12xlarge": {
+   "description": "$2.1624 per On Demand Linux c7g.12xlarge Instance Hour",
+   "memory_gib": 96.0,
+   "sku": "6R2XYAHHQV7EK9QM",
+   "usd_per_hour": 2.1624,
+   "vcpu": 48
+  },
+  "c7g.16xlarge": {
+   "description": "$2.8832 per On Demand Linux c7g.16xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "RWCKKHM3F6A9PPFT",
+   "usd_per_hour": 2.8832,
+   "vcpu": 64
+  },
+  "c7g.2xlarge": {
+   "description": "$0.3604 per On Demand Linux c7g.2xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "JXBG6DN2PVUB8JNX",
+   "usd_per_hour": 0.3604,
+   "vcpu": 8
+  },
+  "c7g.4xlarge": {
+   "description": "$0.7208 per On Demand Linux c7g.4xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "84DH5473TD52TZ6K",
+   "usd_per_hour": 0.7208,
+   "vcpu": 16
+  },
+  "c7g.8xlarge": {
+   "description": "$1.4416 per On Demand Linux c7g.8xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "PBXQ3K7GBBA9V9WX",
+   "usd_per_hour": 1.4416,
+   "vcpu": 32
+  },
+  "c7g.large": {
+   "description": "$0.0901 per On Demand Linux c7g.large Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "WAXBXYB53KPGM8GE",
+   "usd_per_hour": 0.0901,
+   "vcpu": 2
+  },
+  "c7g.medium": {
+   "description": "$0.0451 per On Demand Linux c7g.medium Instance Hour",
+   "memory_gib": 2.0,
+   "sku": "SHTMQ47K6YDDMKH7",
+   "usd_per_hour": 0.0451,
+   "vcpu": 1
+  },
+  "c7g.xlarge": {
+   "description": "$0.1802 per On Demand Linux c7g.xlarge Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "X7ECHGKGQ23244Z5",
+   "usd_per_hour": 0.1802,
+   "vcpu": 4
+  },
+  "c7i.12xlarge": {
+   "description": "$2.6712 per On Demand Linux c7i.12xlarge Instance Hour",
+   "memory_gib": 96.0,
+   "sku": "4EU38UDZHEKJP36T",
+   "usd_per_hour": 2.6712,
+   "vcpu": 48
+  },
+  "c7i.16xlarge": {
+   "description": "$3.5616 per On Demand Linux c7i.16xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "4FNPXGBSF5G36HEK",
+   "usd_per_hour": 3.5616,
+   "vcpu": 64
+  },
+  "c7i.24xlarge": {
+   "description": "$5.3424 per On Demand Linux c7i.24xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "sku": "WPUWCTKV6CQ7ZQ8D",
+   "usd_per_hour": 5.3424,
+   "vcpu": 96
+  },
+  "c7i.2xlarge": {
+   "description": "$0.4452 per On Demand Linux c7i.2xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "8R5R9V2M22TTSEDN",
+   "usd_per_hour": 0.4452,
+   "vcpu": 8
+  },
+  "c7i.48xlarge": {
+   "description": "$10.6848 per On Demand Linux c7i.48xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "sku": "ED2G97ZRYN7S86F9",
+   "usd_per_hour": 10.6848,
+   "vcpu": 192
+  },
+  "c7i.4xlarge": {
+   "description": "$0.8904 per On Demand Linux c7i.4xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "QWX7ZJURPRQ4TVEB",
+   "usd_per_hour": 0.8904,
+   "vcpu": 16
+  },
+  "c7i.8xlarge": {
+   "description": "$1.7808 per On Demand Linux c7i.8xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "SU3NJ7BAN2KKZERV",
+   "usd_per_hour": 1.7808,
+   "vcpu": 32
+  },
+  "c7i.large": {
+   "description": "$0.1113 per On Demand Linux c7i.large Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "CXQGJ746TW9JA7C6",
+   "usd_per_hour": 0.1113,
+   "vcpu": 2
+  },
+  "c7i.xlarge": {
+   "description": "$0.2226 per On Demand Linux c7i.xlarge Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "E3WSWA5B9KZ75KEP",
+   "usd_per_hour": 0.2226,
+   "vcpu": 4
+  },
+  "m5.12xlarge": {
+   "description": "$2.688 per On Demand Linux m5.12xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "sku": "6ZT2UARGHJXH8BU5",
+   "usd_per_hour": 2.688,
+   "vcpu": 48
+  },
+  "m5.16xlarge": {
+   "description": "$3.584 per On Demand Linux m5.16xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "2UKWKKWFSYDMCT8R",
+   "usd_per_hour": 3.584,
+   "vcpu": 64
+  },
+  "m5.24xlarge": {
+   "description": "$5.376 per On Demand Linux m5.24xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "sku": "J8NWUR4HHDFDPBW2",
+   "usd_per_hour": 5.376,
+   "vcpu": 96
+  },
+  "m5.2xlarge": {
+   "description": "$0.448 per On Demand Linux m5.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "TYJPPC4RGCTVTZBK",
+   "usd_per_hour": 0.448,
+   "vcpu": 8
+  },
+  "m5.4xlarge": {
+   "description": "$0.896 per On Demand Linux m5.4xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "9V4YEGESP35GKP5B",
+   "usd_per_hour": 0.896,
+   "vcpu": 16
+  },
+  "m5.8xlarge": {
+   "description": "$1.792 per On Demand Linux m5.8xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "C92BKZX2RSH8PCV8",
+   "usd_per_hour": 1.792,
+   "vcpu": 32
+  },
+  "m5.large": {
+   "description": "$0.112 per On Demand Linux m5.large Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "6HSUA77D4PHGHSKF",
+   "usd_per_hour": 0.112,
+   "vcpu": 2
+  },
+  "m5.xlarge": {
+   "description": "$0.224 per On Demand Linux m5.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "U5UGF8V3EG7QA58Z",
+   "usd_per_hour": 0.224,
+   "vcpu": 4
+  },
+  "m6g.12xlarge": {
+   "description": "$2.1504 per On Demand Linux m6g.12xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "sku": "CHP327N5CBV5XT9J",
+   "usd_per_hour": 2.1504,
+   "vcpu": 48
+  },
+  "m6g.16xlarge": {
+   "description": "$2.8672 per On Demand Linux m6g.16xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "DJ5NDKZK2S2FNDN8",
+   "usd_per_hour": 2.8672,
+   "vcpu": 64
+  },
+  "m6g.2xlarge": {
+   "description": "$0.3584 per On Demand Linux m6g.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "N6WDEHUXEYTDN3YK",
+   "usd_per_hour": 0.3584,
+   "vcpu": 8
+  },
+  "m6g.4xlarge": {
+   "description": "$0.7168 per On Demand Linux m6g.4xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "MRY49CZA99E32SR3",
+   "usd_per_hour": 0.7168,
+   "vcpu": 16
+  },
+  "m6g.8xlarge": {
+   "description": "$1.4336 per On Demand Linux m6g.8xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "8P7RXDY6U9YGX4Q4",
+   "usd_per_hour": 1.4336,
+   "vcpu": 32
+  },
+  "m6g.large": {
+   "description": "$0.0896 per On Demand Linux m6g.large Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "CABAUWY4HVCFF6GS",
+   "usd_per_hour": 0.0896,
+   "vcpu": 2
+  },
+  "m6g.medium": {
+   "description": "$0.0448 per On Demand Linux m6g.medium Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "5UNM9DPXBATK3BVS",
+   "usd_per_hour": 0.0448,
+   "vcpu": 1
+  },
+  "m6g.xlarge": {
+   "description": "$0.1792 per On Demand Linux m6g.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "M5NU9MF8UANRQNKR",
+   "usd_per_hour": 0.1792,
+   "vcpu": 4
+  },
+  "m6i.12xlarge": {
+   "description": "$2.688 per On Demand Linux m6i.12xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "sku": "WHBJVM3W5QEB9HHR",
+   "usd_per_hour": 2.688,
+   "vcpu": 48
+  },
+  "m6i.16xlarge": {
+   "description": "$3.584 per On Demand Linux m6i.16xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "A9DPPTKA67BN3AHG",
+   "usd_per_hour": 3.584,
+   "vcpu": 64
+  },
+  "m6i.24xlarge": {
+   "description": "$5.376 per On Demand Linux m6i.24xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "sku": "QFNJ6TVEE8KBRY5V",
+   "usd_per_hour": 5.376,
+   "vcpu": 96
+  },
+  "m6i.2xlarge": {
+   "description": "$0.448 per On Demand Linux m6i.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "AU4NYD7P3S3KDWYN",
+   "usd_per_hour": 0.448,
+   "vcpu": 8
+  },
+  "m6i.32xlarge": {
+   "description": "$7.168 per On Demand Linux m6i.32xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "sku": "XM5C2T4ZB8W47S67",
+   "usd_per_hour": 7.168,
+   "vcpu": 128
+  },
+  "m6i.4xlarge": {
+   "description": "$0.896 per On Demand Linux m6i.4xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "FVSSVZCQFTT45S4X",
+   "usd_per_hour": 0.896,
+   "vcpu": 16
+  },
+  "m6i.8xlarge": {
+   "description": "$1.792 per On Demand Linux m6i.8xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "3NGR38BQGGS6KXJ6",
+   "usd_per_hour": 1.792,
+   "vcpu": 32
+  },
+  "m6i.large": {
+   "description": "$0.112 per On Demand Linux m6i.large Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "TVMHUWVQ6Z8KXHJT",
+   "usd_per_hour": 0.112,
+   "vcpu": 2
+  },
+  "m6i.xlarge": {
+   "description": "$0.224 per On Demand Linux m6i.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "9FVAT8SR6V3GGV7S",
+   "usd_per_hour": 0.224,
+   "vcpu": 4
+  },
+  "m7g.12xlarge": {
+   "description": "$2.2848 per On Demand Linux m7g.12xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "sku": "JD9P5HYYD9EUXT5A",
+   "usd_per_hour": 2.2848,
+   "vcpu": 48
+  },
+  "m7g.16xlarge": {
+   "description": "$3.0464 per On Demand Linux m7g.16xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "7T2VMC6T6ASDW999",
+   "usd_per_hour": 3.0464,
+   "vcpu": 64
+  },
+  "m7g.2xlarge": {
+   "description": "$0.3808 per On Demand Linux m7g.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "PYZVMH5D6JPQE8MY",
+   "usd_per_hour": 0.3808,
+   "vcpu": 8
+  },
+  "m7g.4xlarge": {
+   "description": "$0.7616 per On Demand Linux m7g.4xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "XKTRYKNGPB9CQ656",
+   "usd_per_hour": 0.7616,
+   "vcpu": 16
+  },
+  "m7g.8xlarge": {
+   "description": "$1.5232 per On Demand Linux m7g.8xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "B5HGNFJ98TBM2HVE",
+   "usd_per_hour": 1.5232,
+   "vcpu": 32
+  },
+  "m7g.large": {
+   "description": "$0.0952 per On Demand Linux m7g.large Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "6NEBY6FWRHRB8ZCU",
+   "usd_per_hour": 0.0952,
+   "vcpu": 2
+  },
+  "m7g.medium": {
+   "description": "$0.0476 per On Demand Linux m7g.medium Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "5968PD8RSADR5VYP",
+   "usd_per_hour": 0.0476,
+   "vcpu": 1
+  },
+  "m7g.xlarge": {
+   "description": "$0.1904 per On Demand Linux m7g.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "Z4VDCW55SUM5V4SX",
+   "usd_per_hour": 0.1904,
+   "vcpu": 4
+  },
+  "m7i.12xlarge": {
+   "description": "$2.8224 per On Demand Linux m7i.12xlarge Instance Hour",
+   "memory_gib": 192.0,
+   "sku": "RZWVVXN3F58A74E4",
+   "usd_per_hour": 2.8224,
+   "vcpu": 48
+  },
+  "m7i.16xlarge": {
+   "description": "$3.7632 per On Demand Linux m7i.16xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "V349HNKG9Y6B6KX4",
+   "usd_per_hour": 3.7632,
+   "vcpu": 64
+  },
+  "m7i.24xlarge": {
+   "description": "$5.6448 per On Demand Linux m7i.24xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "sku": "P6WKGNTECPTP2QAC",
+   "usd_per_hour": 5.6448,
+   "vcpu": 96
+  },
+  "m7i.2xlarge": {
+   "description": "$0.4704 per On Demand Linux m7i.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "3RR3XUAEHCR2SDPX",
+   "usd_per_hour": 0.4704,
+   "vcpu": 8
+  },
+  "m7i.48xlarge": {
+   "description": "$11.2896 per On Demand Linux m7i.48xlarge Instance Hour",
+   "memory_gib": 768.0,
+   "sku": "JGUJBGF6MU8QTUX9",
+   "usd_per_hour": 11.2896,
+   "vcpu": 192
+  },
+  "m7i.4xlarge": {
+   "description": "$0.9408 per On Demand Linux m7i.4xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "WZ3A4523BE8CEFVT",
+   "usd_per_hour": 0.9408,
+   "vcpu": 16
+  },
+  "m7i.8xlarge": {
+   "description": "$1.8816 per On Demand Linux m7i.8xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "3TSDN6BQADCHTBGE",
+   "usd_per_hour": 1.8816,
+   "vcpu": 32
+  },
+  "m7i.large": {
+   "description": "$0.1176 per On Demand Linux m7i.large Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "M42E2XJND79B24XJ",
+   "usd_per_hour": 0.1176,
+   "vcpu": 2
+  },
+  "m7i.xlarge": {
+   "description": "$0.2352 per On Demand Linux m7i.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "88Z3WPPMTTRUHD5V",
+   "usd_per_hour": 0.2352,
+   "vcpu": 4
+  },
+  "r5.12xlarge": {
+   "description": "$3.36 per On Demand Linux r5.12xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "sku": "FNF3D2E8J5ABDD2W",
+   "usd_per_hour": 3.36,
+   "vcpu": 48
+  },
+  "r5.16xlarge": {
+   "description": "$4.48 per On Demand Linux r5.16xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "sku": "HADSVEHF9DYR4P7T",
+   "usd_per_hour": 4.48,
+   "vcpu": 64
+  },
+  "r5.24xlarge": {
+   "description": "$6.72 per On Demand Linux r5.24xlarge Instance Hour",
+   "memory_gib": 768.0,
+   "sku": "VWJ8EAZQXR45BUB6",
+   "usd_per_hour": 6.72,
+   "vcpu": 96
+  },
+  "r5.2xlarge": {
+   "description": "$0.56 per On Demand Linux r5.2xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "F9XWRY93YTTZ4UCH",
+   "usd_per_hour": 0.56,
+   "vcpu": 8
+  },
+  "r5.4xlarge": {
+   "description": "$1.12 per On Demand Linux r5.4xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "SN8ZDG73ZF6HJWHY",
+   "usd_per_hour": 1.12,
+   "vcpu": 16
+  },
+  "r5.8xlarge": {
+   "description": "$2.24 per On Demand Linux r5.8xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "4NMSK89RC7VGAR4V",
+   "usd_per_hour": 2.24,
+   "vcpu": 32
+  },
+  "r5.large": {
+   "description": "$0.14 per On Demand Linux r5.large Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "6NNNM36C5C8XQQ7Q",
+   "usd_per_hour": 0.14,
+   "vcpu": 2
+  },
+  "r5.xlarge": {
+   "description": "$0.28 per On Demand Linux r5.xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "ET3ZNXJBEAKFNCWT",
+   "usd_per_hour": 0.28,
+   "vcpu": 4
+  },
+  "r6g.12xlarge": {
+   "description": "$2.688 per On Demand Linux r6g.12xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "sku": "WEPAAZ5GDXUTQA4A",
+   "usd_per_hour": 2.688,
+   "vcpu": 48
+  },
+  "r6g.16xlarge": {
+   "description": "$3.584 per On Demand Linux r6g.16xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "sku": "7EP5VXZBHFTHPRND",
+   "usd_per_hour": 3.584,
+   "vcpu": 64
+  },
+  "r6g.2xlarge": {
+   "description": "$0.448 per On Demand Linux r6g.2xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "NF57AHSNWEJGWQA4",
+   "usd_per_hour": 0.448,
+   "vcpu": 8
+  },
+  "r6g.4xlarge": {
+   "description": "$0.896 per On Demand Linux r6g.4xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "QFP9D8FNPQW48263",
+   "usd_per_hour": 0.896,
+   "vcpu": 16
+  },
+  "r6g.8xlarge": {
+   "description": "$1.792 per On Demand Linux r6g.8xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "AR8YFEU3NRBKFP7Y",
+   "usd_per_hour": 1.792,
+   "vcpu": 32
+  },
+  "r6g.large": {
+   "description": "$0.112 per On Demand Linux r6g.large Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "PYEXX3EQRUDAB5YU",
+   "usd_per_hour": 0.112,
+   "vcpu": 2
+  },
+  "r6g.medium": {
+   "description": "$0.056 per On Demand Linux r6g.medium Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "UVX2VYZD48T3S9KT",
+   "usd_per_hour": 0.056,
+   "vcpu": 1
+  },
+  "r6g.xlarge": {
+   "description": "$0.224 per On Demand Linux r6g.xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "68HTVWE9J4JC89BU",
+   "usd_per_hour": 0.224,
+   "vcpu": 4
+  },
+  "r6i.12xlarge": {
+   "description": "$3.36 per On Demand Linux r6i.12xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "sku": "766R2PJEKNCSJC8D",
+   "usd_per_hour": 3.36,
+   "vcpu": 48
+  },
+  "r6i.16xlarge": {
+   "description": "$4.48 per On Demand Linux r6i.16xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "sku": "Q27AUTE6NJXCVTE7",
+   "usd_per_hour": 4.48,
+   "vcpu": 64
+  },
+  "r6i.24xlarge": {
+   "description": "$6.72 per On Demand Linux r6i.24xlarge Instance Hour",
+   "memory_gib": 768.0,
+   "sku": "832U9KC8T8M244XD",
+   "usd_per_hour": 6.72,
+   "vcpu": 96
+  },
+  "r6i.2xlarge": {
+   "description": "$0.56 per On Demand Linux r6i.2xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "6NZW2V6FC3YJKRBR",
+   "usd_per_hour": 0.56,
+   "vcpu": 8
+  },
+  "r6i.32xlarge": {
+   "description": "$8.96 per On Demand Linux r6i.32xlarge Instance Hour",
+   "memory_gib": 1024.0,
+   "sku": "2NG6GQD96TJWJ9VY",
+   "usd_per_hour": 8.96,
+   "vcpu": 128
+  },
+  "r6i.4xlarge": {
+   "description": "$1.12 per On Demand Linux r6i.4xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "M7J7AA3Z5XXNHYWY",
+   "usd_per_hour": 1.12,
+   "vcpu": 16
+  },
+  "r6i.8xlarge": {
+   "description": "$2.24 per On Demand Linux r6i.8xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "RVWMEBC94T9FXTJN",
+   "usd_per_hour": 2.24,
+   "vcpu": 32
+  },
+  "r6i.large": {
+   "description": "$0.14 per On Demand Linux r6i.large Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "KMY7YNZ3HS7Y4BNR",
+   "usd_per_hour": 0.14,
+   "vcpu": 2
+  },
+  "r6i.xlarge": {
+   "description": "$0.28 per On Demand Linux r6i.xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "Z49PBTQTJAPWRYGV",
+   "usd_per_hour": 0.28,
+   "vcpu": 4
+  },
+  "r7g.12xlarge": {
+   "description": "$2.856 per On Demand Linux r7g.12xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "sku": "B9VRE54GAXNXJ9E5",
+   "usd_per_hour": 2.856,
+   "vcpu": 48
+  },
+  "r7g.16xlarge": {
+   "description": "$3.808 per On Demand Linux r7g.16xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "sku": "QH3STFD4CDQ5PVQ8",
+   "usd_per_hour": 3.808,
+   "vcpu": 64
+  },
+  "r7g.2xlarge": {
+   "description": "$0.476 per On Demand Linux r7g.2xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "8TQ8DY2YZT6633G4",
+   "usd_per_hour": 0.476,
+   "vcpu": 8
+  },
+  "r7g.4xlarge": {
+   "description": "$0.952 per On Demand Linux r7g.4xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "4T36JAD9J54FXC6N",
+   "usd_per_hour": 0.952,
+   "vcpu": 16
+  },
+  "r7g.8xlarge": {
+   "description": "$1.904 per On Demand Linux r7g.8xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "SZF4V8TFDW8ZYG9C",
+   "usd_per_hour": 1.904,
+   "vcpu": 32
+  },
+  "r7g.large": {
+   "description": "$0.119 per On Demand Linux r7g.large Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "NJBVA8F6RU8CZCMB",
+   "usd_per_hour": 0.119,
+   "vcpu": 2
+  },
+  "r7g.medium": {
+   "description": "$0.0595 per On Demand Linux r7g.medium Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "C8EEHSGG2HDCF4DS",
+   "usd_per_hour": 0.0595,
+   "vcpu": 1
+  },
+  "r7g.xlarge": {
+   "description": "$0.238 per On Demand Linux r7g.xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "AC95T5NT9YZ9GN9X",
+   "usd_per_hour": 0.238,
+   "vcpu": 4
+  },
+  "r7i.12xlarge": {
+   "description": "$3.528 per On Demand Linux r7i.12xlarge Instance Hour",
+   "memory_gib": 384.0,
+   "sku": "UX64EVWBCHZ9WE4Q",
+   "usd_per_hour": 3.528,
+   "vcpu": 48
+  },
+  "r7i.16xlarge": {
+   "description": "$4.704 per On Demand Linux r7i.16xlarge Instance Hour",
+   "memory_gib": 512.0,
+   "sku": "2S5CCFEN43PG623W",
+   "usd_per_hour": 4.704,
+   "vcpu": 64
+  },
+  "r7i.24xlarge": {
+   "description": "$7.056 per On Demand Linux r7i.24xlarge Instance Hour",
+   "memory_gib": 768.0,
+   "sku": "YQBSN3EDVPREVM54",
+   "usd_per_hour": 7.056,
+   "vcpu": 96
+  },
+  "r7i.2xlarge": {
+   "description": "$0.588 per On Demand Linux r7i.2xlarge Instance Hour",
+   "memory_gib": 64.0,
+   "sku": "7K8M7TUCNEP6A6RC",
+   "usd_per_hour": 0.588,
+   "vcpu": 8
+  },
+  "r7i.48xlarge": {
+   "description": "$14.112 per On Demand Linux r7i.48xlarge Instance Hour",
+   "memory_gib": 1536.0,
+   "sku": "UVE47Q54CY9YYAXM",
+   "usd_per_hour": 14.112,
+   "vcpu": 192
+  },
+  "r7i.4xlarge": {
+   "description": "$1.176 per On Demand Linux r7i.4xlarge Instance Hour",
+   "memory_gib": 128.0,
+   "sku": "3BJ2X52KCQDAMWJS",
+   "usd_per_hour": 1.176,
+   "vcpu": 16
+  },
+  "r7i.8xlarge": {
+   "description": "$2.352 per On Demand Linux r7i.8xlarge Instance Hour",
+   "memory_gib": 256.0,
+   "sku": "WM9GNQM8KQ65RVEP",
+   "usd_per_hour": 2.352,
+   "vcpu": 32
+  },
+  "r7i.large": {
+   "description": "$0.147 per On Demand Linux r7i.large Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "5KAV5X64GNC5M5PD",
+   "usd_per_hour": 0.147,
+   "vcpu": 2
+  },
+  "r7i.xlarge": {
+   "description": "$0.294 per On Demand Linux r7i.xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "KCQVBJ8V66UQDKNM",
+   "usd_per_hour": 0.294,
+   "vcpu": 4
+  },
+  "t2.2xlarge": {
+   "description": "$0.4416 per On Demand Linux t2.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "YPK2GJ5Z9TMRRSK7",
+   "usd_per_hour": 0.4416,
+   "vcpu": 8
+  },
+  "t2.large": {
+   "description": "$0.1104 per On Demand Linux t2.large Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "D7EXY7CNAHW9BTHD",
+   "usd_per_hour": 0.1104,
+   "vcpu": 2
+  },
+  "t2.medium": {
+   "description": "$0.0552 per On Demand Linux t2.medium Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "7T9BSUQBURKAGP2T",
+   "usd_per_hour": 0.0552,
+   "vcpu": 2
+  },
+  "t2.micro": {
+   "description": "$0.0138 per On Demand Linux t2.micro Instance Hour",
+   "memory_gib": 1.0,
+   "sku": "J6T772QKJ5B49GMC",
+   "usd_per_hour": 0.0138,
+   "vcpu": 1
+  },
+  "t2.nano": {
+   "description": "$0.0069 per On Demand Linux t2.nano Instance Hour",
+   "memory_gib": 0.5,
+   "sku": "GRKGK4BN2EGBK686",
+   "usd_per_hour": 0.0069,
+   "vcpu": 1
+  },
+  "t2.small": {
+   "description": "$0.0276 per On Demand Linux t2.small Instance Hour",
+   "memory_gib": 2.0,
+   "sku": "JHV4BKWFVMXQ2T6R",
+   "usd_per_hour": 0.0276,
+   "vcpu": 1
+  },
+  "t2.xlarge": {
+   "description": "$0.2208 per On Demand Linux t2.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "76F5CX9DPY2B39T5",
+   "usd_per_hour": 0.2208,
+   "vcpu": 4
+  },
+  "t3.2xlarge": {
+   "description": "$0.3968 per On Demand Linux t3.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "TJVQCXR689T6F2WB",
+   "usd_per_hour": 0.3968,
+   "vcpu": 8
+  },
+  "t3.large": {
+   "description": "$0.0992 per On Demand Linux t3.large Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "CKTY9GB26YVYKQB4",
+   "usd_per_hour": 0.0992,
+   "vcpu": 2
+  },
+  "t3.medium": {
+   "description": "$0.0496 per On Demand Linux t3.medium Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "WUBJ9UB3Q9FCFGD4",
+   "usd_per_hour": 0.0496,
+   "vcpu": 2
+  },
+  "t3.micro": {
+   "description": "$0.0124 per On Demand Linux t3.micro Instance Hour",
+   "memory_gib": 1.0,
+   "sku": "UEEQUH9C49476TP9",
+   "usd_per_hour": 0.0124,
+   "vcpu": 2
+  },
+  "t3.nano": {
+   "description": "$0.0062 per On Demand Linux t3.nano Instance Hour",
+   "memory_gib": 0.5,
+   "sku": "5EDHWY2G68899HDR",
+   "usd_per_hour": 0.0062,
+   "vcpu": 2
+  },
+  "t3.small": {
+   "description": "$0.0248 per On Demand Linux t3.small Instance Hour",
+   "memory_gib": 2.0,
+   "sku": "C9T4V58VZ3SK8FMK",
+   "usd_per_hour": 0.0248,
+   "vcpu": 2
+  },
+  "t3.xlarge": {
+   "description": "$0.1984 per On Demand Linux t3.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "N4KG79XZEJHQR4RF",
+   "usd_per_hour": 0.1984,
+   "vcpu": 4
+  },
+  "t3a.2xlarge": {
+   "description": "$0.3571 per On Demand Linux t3a.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "DY2N5SD2ERNEAQQQ",
+   "usd_per_hour": 0.3571,
+   "vcpu": 8
+  },
+  "t3a.large": {
+   "description": "$0.0893 per On Demand Linux t3a.large Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "48KG2ZJ2XRJK5HGE",
+   "usd_per_hour": 0.0893,
+   "vcpu": 2
+  },
+  "t3a.medium": {
+   "description": "$0.0446 per On Demand Linux t3a.medium Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "E4YZCUR3KN9FNNXC",
+   "usd_per_hour": 0.0446,
+   "vcpu": 2
+  },
+  "t3a.micro": {
+   "description": "$0.0112 per On Demand Linux t3a.micro Instance Hour",
+   "memory_gib": 1.0,
+   "sku": "DPATDARKDKR94NR5",
+   "usd_per_hour": 0.0112,
+   "vcpu": 2
+  },
+  "t3a.nano": {
+   "description": "$0.0056 per On Demand Linux t3a.nano Instance Hour",
+   "memory_gib": 0.5,
+   "sku": "S4V7MN5TDJSWKM4G",
+   "usd_per_hour": 0.0056,
+   "vcpu": 2
+  },
+  "t3a.small": {
+   "description": "$0.0223 per On Demand Linux t3a.small Instance Hour",
+   "memory_gib": 2.0,
+   "sku": "792U3X9RH336KUZH",
+   "usd_per_hour": 0.0223,
+   "vcpu": 2
+  },
+  "t3a.xlarge": {
+   "description": "$0.1786 per On Demand Linux t3a.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "SBSCQDRQ3CNSZR8F",
+   "usd_per_hour": 0.1786,
+   "vcpu": 4
+  },
+  "t4g.2xlarge": {
+   "description": "$0.32 per On Demand Linux t4g.2xlarge Instance Hour",
+   "memory_gib": 32.0,
+   "sku": "W6EAUTAAWGZMSKZH",
+   "usd_per_hour": 0.32,
+   "vcpu": 8
+  },
+  "t4g.large": {
+   "description": "$0.08 per On Demand Linux t4g.large Instance Hour",
+   "memory_gib": 8.0,
+   "sku": "KDHU7TC34HSPAVGP",
+   "usd_per_hour": 0.08,
+   "vcpu": 2
+  },
+  "t4g.medium": {
+   "description": "$0.04 per On Demand Linux t4g.medium Instance Hour",
+   "memory_gib": 4.0,
+   "sku": "3T92WWDDBH89ASC5",
+   "usd_per_hour": 0.04,
+   "vcpu": 2
+  },
+  "t4g.micro": {
+   "description": "$0.01 per On Demand Linux t4g.micro Instance Hour",
+   "memory_gib": 1.0,
+   "sku": "TBBZSJFW7B6GMG2X",
+   "usd_per_hour": 0.01,
+   "vcpu": 2
+  },
+  "t4g.nano": {
+   "description": "$0.005 per On Demand Linux t4g.nano Instance Hour",
+   "memory_gib": 0.5,
+   "sku": "GY45JB7BTQSQAR9C",
+   "usd_per_hour": 0.005,
+   "vcpu": 2
+  },
+  "t4g.small": {
+   "description": "$0.02 per On Demand Linux t4g.small Instance Hour",
+   "memory_gib": 2.0,
+   "sku": "9QZEPSPF8754RCGP",
+   "usd_per_hour": 0.02,
+   "vcpu": 2
+  },
+  "t4g.xlarge": {
+   "description": "$0.16 per On Demand Linux t4g.xlarge Instance Hour",
+   "memory_gib": 16.0,
+   "sku": "R8MMNTJ5UBY4VKM3",
+   "usd_per_hour": 0.16,
+   "vcpu": 4
+  }
+ },
+ "other": {
+  "alb_hour": {
+   "description": "$0.0252 per Application LoadBalancer-hour (or partial hour)",
+   "sku": "EKZPKYTNKJ2K9B44",
+   "unit": "Hrs",
+   "usd": 0.0252
+  },
+  "ebs_gp2_gb_month": {
+   "description": "$0.12 per GB-month of General Purpose SSD (gp2) provisioned storage - US West (Northern California)",
+   "sku": "UZ6TZ5NDAH7AGJPJ",
+   "unit": "GB-Mo",
+   "usd": 0.12
+  },
+  "ebs_gp3_gb_month": {
+   "description": "$0.096 per GB-month of General Purpose (gp3) provisioned storage - US West (N. California)",
+   "sku": "EVEXZNAGZAHWUGG3",
+   "unit": "GB-Mo",
+   "usd": 0.096
+  },
+  "ebs_gp3_iops_month": {
+   "description": "$0.006 per provisioned IOPS-month of gp3 - US West (N. California)",
+   "sku": "PW3FB23N3JWG2ZA2",
+   "unit": "IOPS-Mo",
+   "usd": 0.006
+  },
+  "ebs_gp3_mbps_month": {
+   "description": "$0.048 per provisioned MiBps-month of gp3 - US West (N. California)",
+   "sku": "ZDC2V7MBY9Z73F7V",
+   "unit": "MiBps-Mo",
+   "usd": 0.048
+  },
+  "ebs_sc1_gb_month": {
+   "description": "$0.018 per GB-month of Cold HDD (sc1) provisioned storage - US West (Northern California)",
+   "sku": "ZVR64QQDXJTQYUHH",
+   "unit": "GB-Mo",
+   "usd": 0.018
+  },
+  "ebs_snapshot_gb_month": {
+   "description": "$0.055 per GB-Month of snapshot data stored - US West (Northern California)",
+   "sku": "3F2BXQPS4TRZ6SR6",
+   "unit": "GB-Mo",
+   "usd": 0.055
+  },
+  "ebs_st1_gb_month": {
+   "description": "$0.054 per GB-month of Throughput Optimized HDD (st1) provisioned storage - US West (Northern California)",
+   "sku": "B424TMTEM4PYGV3K",
+   "unit": "GB-Mo",
+   "usd": 0.054
+  },
+  "ebs_standard_gb_month": {
+   "description": "$0.08 per GB-month of Magnetic provisioned storage - US West (Northern California)",
+   "sku": "XZNHNJ5CUQKUZQZH",
+   "unit": "GB-Mo",
+   "usd": 0.08
+  },
+  "nat_gateway_hour": {
+   "description": "$0.048 per NAT Gateway Hour",
+   "sku": "C8JU5MW5DN6ZHDX4",
+   "unit": "Hrs",
+   "usd": 0.048
+  },
+  "nlb_hour": {
+   "description": "$0.0252 per Network LoadBalancer-hour (or partial hour)",
+   "sku": "Q6DPHSXB6ZE4WQ3H",
+   "unit": "Hrs",
+   "usd": 0.0252
+  },
+  "public_ipv4_idle_hour": {
+   "description": "$0.005 per Idle public IPv4 address per hour",
+   "sku": "EV2GGV9RX9EWTBJJ",
+   "unit": "Hrs",
+   "usd": 0.005
+  },
+  "public_ipv4_inuse_hour": {
+   "description": "$0.005 per In-use public IPv4 address per hour",
+   "sku": "DJSSVME846XCJQ9C",
+   "unit": "Hrs",
+   "usd": 0.005
+  }
+ },
+ "price_list_version": "20261124231417",
+ "region": "us-west-1"
+}

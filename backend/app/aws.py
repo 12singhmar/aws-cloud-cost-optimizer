@@ -1,65 +1,76 @@
-"""Reads an AWS account with boto3. Read-only: only describe/get calls.
+"""Reads an AWS account with boto3, in every region. Only describe/get/list calls.
 
-Credentials come from the normal AWS chain, so any of these work:
-  - `aws login --profile ccx` (console sign-in, no access keys)
-  - access keys from `aws configure`
-  - temporary keys in environment variables (e.g. a sandbox account)
+Credentials come from the normal AWS places: `aws login --profile ccx`,
+`aws configure`, or environment variables.
 """
 
-from __future__ import annotations
-
+import os
 import re
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 
 import boto3
+from botocore.exceptions import BotoCoreError, ClientError
 
-from app.models import EbsSnapshot, ElasticIp, Instance, Metrics, Scan, Volume
+from app.models import Metrics, Resource, Scan
 
-METRIC_DAYS = 14
+CPU_DAYS = 14
 STOP_TIME = re.compile(r"\((\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) GMT\)")
 
 
-def make_session(profile: str | None = None, region: str | None = None):
-    return boto3.Session(profile_name=profile, region_name=region)
+def make_session(profile=None, region=None):
+    return boto3.Session(profile_name=profile, region_name=region or "us-east-1")
 
 
-def whoami(session) -> dict:
-    """Which account are we connected to? Raises if credentials are missing/invalid."""
-    ident = session.client("sts").get_caller_identity()
-    return {"account": mask(ident["Account"]),
-            "arn_type": ident["Arn"].split(":")[5].split("/")[0],   # user, assumed-role, root
-            "region": session.region_name}
+def is_fake_aws():
+    """Test mode: boto3 is pointed at a fake AWS on this computer (moto), not the real one."""
+    return bool(os.environ.get("AWS_ENDPOINT_URL"))
 
 
-def mask(account_id: str) -> str:
+def mask(account_id):
     return "********" + account_id[-4:]
 
 
-def _name(tags) -> str:
-    return next((t["Value"] for t in tags or [] if t["Key"] == "Name"), "")
+def whoami(session):
+    ident = session.client("sts").get_caller_identity()
+    return {"account": mask(ident["Account"]), "user": ident["Arn"].split(":")[-1]}
 
 
-def _hourly(cw, instance_id: str, metric: str, stat: str, start: datetime, hours: int) -> list:
-    resp = cw.get_metric_statistics(
-        Namespace="AWS/EC2", MetricName=metric, Statistics=[stat], Period=3600,
-        Dimensions=[{"Name": "InstanceId", "Value": instance_id}],
-        StartTime=start, EndTime=start + timedelta(hours=hours))
+def enabled_regions(session):
+    ec2 = session.client("ec2")
+    regions = ec2.describe_regions(
+        Filters=[{"Name": "opt-in-status", "Values": ["opt-in-not-required", "opted-in"]}])["Regions"]
+    return sorted(r["RegionName"] for r in regions)
+
+
+def name_of(tags):
+    for t in tags or []:
+        if t["Key"] == "Name":
+            return t["Value"]
+    return ""
+
+
+def hourly(cw, namespace, metric, dims, stat, start, hours):
+    """One CloudWatch call -> one value per hour (None where there is no data)."""
+    resp = cw.get_metric_statistics(Namespace=namespace, MetricName=metric, Dimensions=dims,
+                                    Statistics=[stat], Period=3600,
+                                    StartTime=start, EndTime=start + timedelta(hours=hours))
     values = [None] * hours
-    for point in resp["Datapoints"]:
-        k = int((point["Timestamp"] - start).total_seconds() // 3600)
+    for p in resp["Datapoints"]:
+        k = int((p["Timestamp"] - start).total_seconds() // 3600)
         if 0 <= k < hours:
-            values[k] = point[stat]
+            values[k] = p[stat]
     return values
 
 
-def scan_account(session) -> Scan:
-    ec2 = session.client("ec2")
-    cw = session.client("cloudwatch")
-    now = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)
-    hours = METRIC_DAYS * 24
+def scan_region(clients, region, now):
+    """Everything that can cost money in one region."""
+    ec2, cw, elb = clients["ec2"], clients["cloudwatch"], clients["elbv2"]
+    found, metrics = [], {}
+    hours = CPU_DAYS * 24
     start = now - timedelta(hours=hours)
 
-    instances, metrics = [], {}
+    # Servers
     for page in ec2.get_paginator("describe_instances").paginate():
         for res in page["Reservations"]:
             for i in res["Instances"]:
@@ -67,46 +78,122 @@ def scan_account(session) -> Scan:
                 if state in ("terminated", "shutting-down"):
                     continue
                 stopped = STOP_TIME.search(i.get("StateTransitionReason", ""))
-                instances.append(Instance(
-                    id=i["InstanceId"], name=_name(i.get("Tags")), type=i["InstanceType"],
-                    state=state, launch_time=i["LaunchTime"],
-                    stopped_since=(datetime.strptime(stopped.group(1), "%Y-%m-%d %H:%M:%S")
-                                   .replace(tzinfo=timezone.utc) if stopped and state == "stopped" else None),
-                    volume_ids=[b["Ebs"]["VolumeId"] for b in i.get("BlockDeviceMappings", []) if "Ebs" in b]))
+                found.append(Resource(
+                    kind="instance", region=region, id=i["InstanceId"], name=name_of(i.get("Tags")),
+                    state=state, created=i["LaunchTime"],
+                    info={"type": i["InstanceType"], "public_ip": i.get("PublicIpAddress"),
+                          "stopped_since": stopped.group(1) if stopped and state == "stopped" else None,
+                          "volume_ids": [b["Ebs"]["VolumeId"] for b in i.get("BlockDeviceMappings", [])
+                                         if "Ebs" in b]}))
                 if state == "running":
+                    dims = [{"Name": "InstanceId", "Value": i["InstanceId"]}]
                     metrics[i["InstanceId"]] = Metrics(
-                        start=start,
-                        cpu=_hourly(cw, i["InstanceId"], "CPUUtilization", "Average", start, hours),
-                        cpu_max=_hourly(cw, i["InstanceId"], "CPUUtilization", "Maximum", start, hours),
-                        network_in=_hourly(cw, i["InstanceId"], "NetworkIn", "Sum", start, hours))
+                        cpu_avg=hourly(cw, "AWS/EC2", "CPUUtilization", dims, "Average", start, hours),
+                        cpu_max=hourly(cw, "AWS/EC2", "CPUUtilization", dims, "Maximum", start, hours))
 
-    volumes = []
+    # Disks
+    volume_ids = set()
     for page in ec2.get_paginator("describe_volumes").paginate():
         for v in page["Volumes"]:
+            volume_ids.add(v["VolumeId"])
             att = v.get("Attachments") or []
-            volumes.append(Volume(
-                id=v["VolumeId"], name=_name(v.get("Tags")), type=v["VolumeType"], size_gb=v["Size"],
-                iops=v.get("Iops"), throughput=v.get("Throughput"), state=v["State"],
-                created=v["CreateTime"], attached_to=att[0]["InstanceId"] if att else None))
-    volume_ids = {v.id for v in volumes}
+            found.append(Resource(
+                kind="volume", region=region, id=v["VolumeId"], name=name_of(v.get("Tags")),
+                state=v["State"], created=v["CreateTime"],
+                info={"size_gb": v["Size"], "type": v["VolumeType"], "iops": v.get("Iops"),
+                      "throughput": v.get("Throughput"),
+                      "attached_to": att[0]["InstanceId"] if att else None}))
 
-    elastic_ips = [ElasticIp(allocation_id=a["AllocationId"], public_ip=a["PublicIp"],
-                             # an empty string also means "not attached"
-                             attached_to=a.get("InstanceId") or a.get("NetworkInterfaceId") or None)
-                   for a in ec2.describe_addresses()["Addresses"] if "AllocationId" in a]
+    # Elastic IPs
+    for a in ec2.describe_addresses()["Addresses"]:
+        found.append(Resource(
+            kind="elastic_ip", region=region, id=a["AllocationId"], name=a["PublicIp"],
+            info={"public_ip": a["PublicIp"],
+                  # an empty string also means "not attached"
+                  "attached_to": a.get("InstanceId") or a.get("NetworkInterfaceId") or None}))
 
-    ami_snapshots = {b["Ebs"]["SnapshotId"]
-                     for img in ec2.describe_images(Owners=["self"])["Images"]
-                     for b in img.get("BlockDeviceMappings", []) if "SnapshotId" in b.get("Ebs", {})}
-    snapshots = []
+    # Snapshots (ours only), and which of them belong to our own machine images
+    ami_snapshots = set()
+    for img in ec2.describe_images(Owners=["self"])["Images"]:
+        for b in img.get("BlockDeviceMappings", []):
+            if "SnapshotId" in b.get("Ebs", {}):
+                ami_snapshots.add(b["Ebs"]["SnapshotId"])
     for page in ec2.get_paginator("describe_snapshots").paginate(OwnerIds=["self"]):
         for s in page["Snapshots"]:
-            snapshots.append(EbsSnapshot(
-                id=s["SnapshotId"], volume_id=s.get("VolumeId"), size_gb=s["VolumeSize"],
-                volume_exists=s.get("VolumeId") in volume_ids,
-                used_by_ami=s["SnapshotId"] in ami_snapshots, created=s["StartTime"]))
+            if s.get("Description", "").startswith("Auto-created snapshot for AMI"):
+                continue        # moto (the fake AWS used in tests) adds these; real AWS does not
+            found.append(Resource(
+                kind="snapshot", region=region, id=s["SnapshotId"], name=name_of(s.get("Tags")),
+                state=s["State"], created=s["StartTime"],
+                info={"size_gb": s["VolumeSize"], "volume_id": s.get("VolumeId"),
+                      "volume_exists": s.get("VolumeId") in volume_ids,
+                      "used_by_ami": s["SnapshotId"] in ami_snapshots,
+                      "made_by_us": any(t["Key"] == "created-by" and t["Value"] == "aws-cost-cleaner"
+                                        for t in s.get("Tags", []))}))
 
-    return Scan(id=f"scan-{now:%Y%m%d-%H%M}", source="aws",
-                account=whoami(session)["account"], region=session.region_name, scanned_at=now,
-                instances=instances, volumes=volumes, elastic_ips=elastic_ips,
-                snapshots=snapshots, metrics=metrics)
+    # NAT gateways, and how much data each sent in the last 7 days
+    for n in ec2.describe_nat_gateways(
+            Filters=[{"Name": "state", "Values": ["pending", "available"]}])["NatGateways"]:
+        sent = hourly(cw, "AWS/NATGateway", "BytesOutToDestination",
+                      [{"Name": "NatGatewayId", "Value": n["NatGatewayId"]}], "Sum",
+                      now - timedelta(days=7), 7 * 24)
+        found.append(Resource(
+            kind="nat_gateway", region=region, id=n["NatGatewayId"], name=name_of(n.get("Tags")),
+            state=n["State"], created=n["CreateTime"],
+            info={"bytes_sent_7d": sum(x for x in sent if x)}))
+
+    # Load balancers, and how many servers are behind each
+    for lb in elb.describe_load_balancers()["LoadBalancers"]:
+        targets = 0
+        try:
+            groups = elb.describe_target_groups(LoadBalancerArn=lb["LoadBalancerArn"])["TargetGroups"]
+        except ClientError as e:
+            if e.response["Error"]["Code"] != "TargetGroupNotFound":
+                raise
+            groups = []        # no target groups at all
+        for tg in groups:
+            targets += len(elb.describe_target_health(TargetGroupArn=tg["TargetGroupArn"])
+                           ["TargetHealthDescriptions"])
+        found.append(Resource(
+            kind="load_balancer", region=region, id=lb["LoadBalancerArn"], name=lb["LoadBalancerName"],
+            state=lb["State"]["Code"], created=lb["CreatedTime"],
+            info={"lb_type": lb["Type"], "targets": targets}))
+
+    return found, metrics
+
+
+def scan_account(session):
+    now = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)
+    regions = enabled_regions(session)
+    # boto3 sessions are not thread-safe, so make every client here, then use them in threads
+    clients = {r: {s: session.client(s, region_name=r) for s in ("ec2", "cloudwatch", "elbv2")}
+               for r in regions}
+
+    def one(region):
+        try:
+            return region, scan_region(clients[region], region, now), None
+        except (BotoCoreError, ClientError) as e:
+            return region, ([], {}), f"{region}: {e}"
+
+    taken = datetime.now(timezone.utc)      # exact time; "now" above is rounded to the hour for CloudWatch
+    scan = Scan(id=f"scan-{taken:%Y%m%d-%H%M%S}", account=whoami(session)["account"], scanned_at=taken,
+                fake_aws=is_fake_aws(), regions=regions)
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        for region, (found, metrics), error in pool.map(one, regions):
+            scan.resources += found
+            scan.metrics.update(metrics)
+            if error:
+                scan.errors.append(error)
+
+    # S3 is global: list buckets that have no lifecycle rule
+    s3 = session.client("s3")
+    try:
+        for b in s3.list_buckets()["Buckets"]:
+            try:
+                s3.get_bucket_lifecycle_configuration(Bucket=b["Name"])
+            except ClientError as e:
+                if e.response["Error"]["Code"] == "NoSuchLifecycleConfiguration":
+                    scan.buckets_without_lifecycle.append(b["Name"])
+    except ClientError as e:
+        scan.errors.append(f"S3: {e}")
+    return scan

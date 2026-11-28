@@ -1,3 +1,5 @@
+"""Waste rules and cost formulas, on small hand-made scans."""
+
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -6,98 +8,102 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from app.models import EbsSnapshot, ElasticIp, Instance, Metrics, Scan, Volume  # noqa: E402
+from app.costs import monthly_cost  # noqa: E402
+from app.models import Metrics, Resource, Scan  # noqa: E402
 from app.prices import load_prices  # noqa: E402
-from app.rules import build_report, volume_cost  # noqa: E402
+from app.rules import find_waste, report  # noqa: E402
 
-NOW = datetime(2026, 11, 21, tzinfo=timezone.utc)
+NOW = datetime(2026, 11, 29, tzinfo=timezone.utc)
 P = load_prices("ap-south-1")
 
 
-def scan(**parts):
-    return Scan(id="t", source="sample", account="x", region="ap-south-1", scanned_at=NOW, **parts)
+def scan(*resources, metrics=None):
+    return Scan(id="t", account="x", scanned_at=NOW, regions=["ap-south-1"],
+                resources=list(resources), metrics=metrics or {})
 
 
-def rules_hit(s):
-    return {(f["resource_id"], f["rule"]) for f in build_report(s, P)["findings"]}
+def res(kind, rid, state="", **info):
+    return Resource(kind=kind, region="ap-south-1", id=rid, state=state, created=NOW - timedelta(days=10), info=info)
 
 
-def vol(vid, state="available", **kw):
-    return Volume(id=vid, type="gp3", size_gb=10, state=state, created=NOW - timedelta(days=3), **kw)
+def disk(rid, state="available", gb=10, vtype="gp3", attached=None):
+    return res("volume", rid, state, size_gb=gb, type=vtype, iops=3000, throughput=125, attached_to=attached)
 
 
-def server(iid, state="running", **kw):
-    return Instance(id=iid, type="t3.micro", state=state, launch_time=NOW - timedelta(days=30), **kw)
+def server(rid, state="running", itype="t3.medium", volumes=()):
+    return res("instance", rid, state, type=itype, public_ip=None, stopped_since=None, volume_ids=list(volumes))
 
 
-def test_unattached_volume_found_attached_ignored():
-    hits = rules_hit(scan(volumes=[vol("v-free"), vol("v-used", state="in-use")]))
-    assert hits == {("v-free", "Unattached EBS volume")}
+def rules_found(s):
+    return {(f.resource_id, f.rule) for f in find_waste(s)[0]}
 
 
-def test_gp3_only_charges_iops_above_free_3000():
-    base, calc, _ = volume_cost(vol("a", iops=3000, throughput=125), P)
-    extra, calc2, _ = volume_cost(vol("b", iops=4000, throughput=125), P)
-    assert base == pytest.approx(10 * P.get("ebs_gp3_gb_month"))
-    assert extra - base == pytest.approx(1000 * P.get("ebs_gp3_iops_month"))
-    assert len(calc) == 1 and len(calc2) == 2
+def test_spare_disk_found_attached_disk_ignored():
+    s = scan(disk("v-spare"), disk("v-used", state="in-use", attached="i-1"))
+    assert rules_found(s) == {("v-spare", "Unattached disk")}
 
 
-def test_unused_elastic_ip():
-    hits = rules_hit(scan(elastic_ips=[ElasticIp(allocation_id="free", public_ip="1.1.1.1"),
-                                       ElasticIp(allocation_id="used", public_ip="2.2.2.2", attached_to="i-1")]))
-    assert hits == {("free", "Unused Elastic IP")}
+def test_disk_cost_is_size_times_price():
+    cost, _ = monthly_cost(disk("v", gb=50), P)
+    assert cost == pytest.approx(50 * P.get("ebs_gp3_gb_month"))
 
 
-def test_stopped_instance_charged_for_its_disk():
-    s = scan(instances=[server("i-1", state="stopped", volume_ids=["v-root"])],
-             volumes=[vol("v-root", state="in-use", attached_to="i-1")])
-    f = build_report(s, P)["findings"][0]
-    assert f["rule"] == "Stopped instance"
-    assert f["monthly_cost"] == round(10 * P.get("ebs_gp3_gb_month"), 2)
+def test_unused_ip_found_used_ip_ignored():
+    s = scan(res("elastic_ip", "free", public_ip="1.1.1.1", attached_to=None),
+             res("elastic_ip", "used", public_ip="2.2.2.2", attached_to="i-1"))
+    f = find_waste(s)[0]
+    assert [x.resource_id for x in f] == ["free"]
+    assert f[0].monthly_cost == round(P.get("public_ipv4_idle_hour") * 730, 2)    # $3.65
 
 
-def test_orphaned_snapshot_but_not_when_disk_exists_or_ami_uses_it():
-    snaps = [EbsSnapshot(id="gone", volume_id="v-x", volume_exists=False, size_gb=5, created=NOW),
-             EbsSnapshot(id="ok", volume_id="v-y", volume_exists=True, size_gb=5, created=NOW),
-             EbsSnapshot(id="ami", volume_id="v-z", volume_exists=False, used_by_ami=True, size_gb=5, created=NOW)]
-    assert rules_hit(scan(snapshots=snaps)) == {("gone", "Orphaned snapshot")}
+def test_stopped_server_is_charged_for_its_disks():
+    s = scan(server("i-1", state="stopped", volumes=["v-root"]), disk("v-root", state="in-use", gb=20, attached="i-1"))
+    f = [x for x in find_waste(s)[0] if x.rule == "Stopped server"][0]
+    assert f.monthly_cost == round(20 * P.get("ebs_gp3_gb_month"), 2)
 
 
-def week(cpu, net_bytes_per_hour, hours=14 * 24):
-    return Metrics(cpu=[cpu] * hours, network_in=[net_bytes_per_hour] * hours)
+def test_old_snapshot_only_when_disk_is_gone_and_not_used_by_an_image():
+    s = scan(res("snapshot", "gone", size_gb=5, volume_id="v-x", volume_exists=False, used_by_ami=False),
+             res("snapshot", "ok", size_gb=5, volume_id="v-y", volume_exists=True, used_by_ami=False),
+             res("snapshot", "ami", size_gb=5, volume_id="v-z", volume_exists=False, used_by_ami=True))
+    assert rules_found(s) == {("gone", "Old snapshot")}
 
 
-def test_idle_instance_needs_low_cpu_and_low_network():
-    s = scan(instances=[server("idle"), server("busy-net"), server("busy-cpu")],
-             metrics={"idle": week(0.5, 1000), "busy-net": week(0.5, 200 * 1024 * 3600),
-                      "busy-cpu": week(40, 1000)})
-    assert rules_hit(s) == {("idle", "Idle instance")}
+def test_nat_gateway_with_no_traffic_is_idle():
+    s = scan(res("nat_gateway", "nat-idle", "available", bytes_sent_7d=0),
+             res("nat_gateway", "nat-busy", "available", bytes_sent_7d=5e9))
+    f = find_waste(s)[0]
+    assert [x.resource_id for x in f] == ["nat-idle"]
+    assert f[0].monthly_cost == round(P.get("nat_gateway_hour") * 730, 2)
 
 
-def test_idle_rule_waits_for_7_days_and_says_so():
-    s = scan(instances=[server("new")], metrics={"new": week(0.5, 1000, hours=48)})
-    report = build_report(s, P)
-    assert report["findings"] == []
-    assert "only 48 hours" in report["notes"][0]
+def test_load_balancer_with_no_servers_is_flagged():
+    s = scan(res("load_balancer", "lb-empty", "active", lb_type="application", targets=0),
+             res("load_balancer", "lb-used", "active", lb_type="application", targets=2))
+    assert rules_found(s) == {("lb-empty", "Empty load balancer")}
 
 
-def test_missing_hours_are_not_counted_as_zero():
-    m = week(0.5, 1000)
-    m.cpu = [None if k % 3 else v for k, v in enumerate(m.cpu)]   # only 1/3 of hours present
-    report = build_report(scan(instances=[server("gappy")], metrics={"gappy": m}), P)
-    assert report["findings"] == [] and report["notes"]
+def week_of_cpu(avg, peak, hours=7 * 24):
+    return Metrics(cpu_avg=[avg] * hours, cpu_max=[peak] * hours)
 
 
-def test_without_network_data_idle_is_judged_on_cpu_and_says_so():
-    s = scan(instances=[server("cpu-only")], metrics={"cpu-only": Metrics(cpu=[0.2] * (14 * 24))})
-    f = build_report(s, P)["findings"][0]
-    assert f["rule"] == "Idle instance"
-    assert "not recorded" in f["evidence"]["Average network in"]
+def test_idle_and_oversized_servers():
+    s = scan(server("i-idle"), server("i-big"), server("i-busy"),
+             metrics={"i-idle": week_of_cpu(0.5, 2), "i-big": week_of_cpu(10, 25), "i-busy": week_of_cpu(50, 90)})
+    assert rules_found(s) == {("i-idle", "Idle server"), ("i-big", "Oversized server")}
+    big = [x for x in find_waste(s)[0] if x.resource_id == "i-big"][0]
+    expected = (P.instance_hourly("t3.medium") - P.instance_hourly("t3.small")) * 730
+    assert big.monthly_cost == round(expected, 2)
 
 
-def test_every_finding_has_evidence_price_and_fix():
-    report = build_report(scan(volumes=[vol("v")], elastic_ips=[ElasticIp(allocation_id="e", public_ip="1.1.1.1")]), P)
-    assert report["monthly_waste"] > 0
-    for f in report["findings"]:
-        assert f["evidence"] and f["calculation"] and f["prices_used"] and f["fix"]
+def test_cpu_rules_wait_for_a_full_week_and_say_so():
+    s = scan(server("i-new"), metrics={"i-new": week_of_cpu(0.5, 2, hours=48)})
+    findings, notes = find_waste(s)
+    assert findings == [] and "48 hours" in notes[0]
+
+
+def test_report_totals_add_up():
+    s = scan(disk("v1", gb=10), disk("v2", gb=30), res("elastic_ip", "ip", public_ip="1.1.1.1", attached_to=None))
+    r = report(s)
+    assert r["monthly_total"] == pytest.approx(sum(x["monthly_cost"] for x in r["inventory"]), abs=0.02)
+    assert r["monthly_waste"] == pytest.approx(r["monthly_total"], abs=0.02)   # all three are waste
